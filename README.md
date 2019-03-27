@@ -4,7 +4,7 @@ A REDCap External Module that allows injection of JavaScript on pages.
 
 ## Requirements
 
-- REDCap 8.0.3 or newer (tested with REDCap 8.11.7).
+- REDCap 8.1.0 or newer (tested with REDCap 8.11.7).
 
 ## Installation
 
