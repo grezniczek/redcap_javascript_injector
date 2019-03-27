@@ -62,6 +62,9 @@
         }
     ],
     "compatibility": {
-        "redcap-version-min": "8.0.3"
-    }
+        "php-version-min": "5.4.0",
+        "php-version-max": "",
+        "redcap-version-min": "8.1.0",
+        "redcap-version-max": ""
+     }
 }
