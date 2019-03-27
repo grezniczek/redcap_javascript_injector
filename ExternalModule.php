@@ -35,7 +35,7 @@ class ExternalModule extends AbstractExternalModule {
 
         foreach ($settings['js'] as $row) {
             if (!empty($row['js_enabled']) && in_array($row['js_type'], ['all', $type]) && (!array_filter($row['js_instruments']) || in_array($instrument, $row['js_instruments']))) {
-                echo '<script>' . strip_tags($row['js_code']) . '</script>';
+                echo '<script>' . $row['js_code'] . '</script>';
             }
         }
     }
