@@ -40,9 +40,16 @@ class ExternalModule extends AbstractExternalModule {
         }
     }
 
+
+    /**
+     * The code for getFormattedSettings and _getFormattedSettings 
+     * originates from https://github.com/ctsit/redcap_css_injector
+     * as of March 27, 2019.
+     */
+
     /**
      * Formats settings into a hierarchical key-value pair array.
-     *
+     * 
      * @param int $project_id
      *   Enter a project ID to get project settings.
      *   Leave blank to get system settings.

@@ -1,7 +1,7 @@
 {
-    "name": "REDCap JS Injector",
+    "name": "REDCap JavaScript Injector",
     "namespace": "RUB\\JSInjector\\ExternalModule",
-    "description": "Allow project admins to inject Javascript code into surveys and data entry pages. <strong><a href=\"https://github.com/grezniczek/redcap-javascript-injector\">See full documentation here</a></strong>.",
+    "description": "Allow project admins to inject JavaScript code into surveys and data entry pages. <strong><a href=\"https://github.com/grezniczek/redcap-javascript-injector\">See full documentation here</a></strong>.",
     "permissions": [
         "redcap_data_entry_form_top",
         "redcap_survey_page_top"
@@ -53,7 +53,7 @@
                     "select2": true
                 },
                 {
-                    "name": "JS Code Snippet (without &lt;script&gt; tags)",
+                    "name": "JavaScript Snippet (without &lt;script&gt; tags)",
                     "key": "js_code",
                     "required": true,
                     "type": "textarea"
