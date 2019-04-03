@@ -8,7 +8,7 @@ A REDCap External Module that allows injection of JavaScript on pages.
 
 ## Installation
 
-- Clone this repo into `<redcap-root>/modules/redcap_js_injector_v\<version-number>`, or
+- Clone this repo into `<redcap-root>/modules/redcap_js_injector_v<version-number>`, or
 - Obtain this module from the Consortium [REDCap Repo](https://redcap.vanderbilt.edu/consortium/modules/index.php) via the Control Center.
 - Go to _Control Center > Technical / Developer Tools > External Modules_ and enable REDCap JavaScript Injector.
 
