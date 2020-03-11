@@ -4,7 +4,9 @@
     "description": "Allow project admins to inject JavaScript code into surveys and data entry pages. <strong><a href=\"https://github.com/grezniczek/redcap-javascript-injector\">See full documentation here</a></strong>.",
     "permissions": [
         "redcap_data_entry_form_top",
-        "redcap_survey_page_top"
+        "redcap_survey_page_top",
+        "redcap_project_home_page",
+        "redcap_every_page_top"
     ],
     "authors": [
         {
@@ -32,8 +34,20 @@
                     "required": true,
                     "choices": [
                         {
-                            "value": "all",
-                            "name": "All"
+                            "value": "php",
+                            "name": "Project Home Page"
+                        },
+                        {
+                            "value": "rsd",
+                            "name": "Record Status Dashboard"
+                        },
+                        {
+                            "value": "aer",
+                            "name": "Add / Edit Records"
+                        },
+                        {
+                            "value": "rhp",
+                            "name": "Record Home Page"
                         },
                         {
                             "value": "survey",
@@ -42,6 +56,10 @@
                         {
                             "value": "data_entry",
                             "name": "Data Entry Pages"
+                        },
+                        {
+                            "value": "all",
+                            "name": "Both, Surveys and Data Entry Pages"
                         }
                     ]
                 },
@@ -50,7 +68,15 @@
                     "key": "js_instruments",
                     "type": "form-list",
                     "repeatable": true,
-                    "select2": true
+                    "select2": true,
+                    "branchingLogic": {
+                        "type": "or",
+                        "conditions": [
+                            { "field": "js_type", "value": "all" },
+                            { "field": "js_type", "value": "survey" },
+                            { "field": "js_type", "value": "data_entry" }
+                        ]
+                    }
                 },
                 {
                     "name": "JavaScript Snippet (without &lt;script&gt; tags)",

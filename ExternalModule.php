@@ -11,11 +11,27 @@ use ExternalModules\ExternalModules;
 class ExternalModule extends AbstractExternalModule {
 
     function redcap_data_entry_form_top($project_id, $record = null, $instrument, $event_id, $group_id = null, $repeat_instance = 1) {
-        $this->injectJS('data_entry', $instrument);
+        $this->injectJS("data_entry", $instrument);
     }
 
     function redcap_survey_page_top($project_id, $record = null, $instrument, $event_id, $group_id = null, $survey_hash, $response_id = null, $repeat_instance = 1) {
-        $this->injectJS('survey', $instrument);
+        $this->injectJS("survey", $instrument);
+    }
+
+    function redcap_project_home_page ($project_id) {
+        $this->injectJS("php", null);
+    }
+
+    function redcap_every_page_top ($project_id) {
+        if (PAGE === "DataEntry/record_status_dashboard.php") {
+            $this->injectJS("rsd", null);
+        }
+        else if (PAGE === "DataEntry/record_home.php" && !isset($_GET["id"])) {
+            $this->injectJS("aer", null);
+        }
+        else if (PAGE === "DataEntry/record_home.php" && isset($_GET["id"])) {
+            $this->injectJS("rhp", null);
+        }
     }
 
     /**
@@ -29,13 +45,13 @@ class ExternalModule extends AbstractExternalModule {
     function injectJS($type, $instrument) {
         $settings = $this->getFormattedSettings(PROJECT_ID);
 
-        if (empty($settings['js'])) {
+        if (empty($settings["js"])) {
             return;
         }
 
-        foreach ($settings['js'] as $row) {
-            if (!empty($row['js_enabled']) && in_array($row['js_type'], ['all', $type]) && (!array_filter($row['js_instruments']) || in_array($instrument, $row['js_instruments']))) {
-                echo '<script>' . $row['js_code'] . '</script>';
+        foreach ($settings["js"] as $row) {
+            if (!empty($row["js_enabled"]) && in_array($row["js_type"], ["all", $type]) && ($instrument == null || !array_filter($row["js_instruments"]) || in_array($instrument, $row["js_instruments"]))) {
+                echo "<script>" . $row["js_code"] . "</script>";
             }
         }
     }
