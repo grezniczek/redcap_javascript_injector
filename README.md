@@ -34,3 +34,4 @@ Version | Description
 ------- | ------------------
 v1.1.0  | New feature: Inject JS on more project pages: Project Home Page, Record Home Page, Add / Edit Records, and Record Status Dashboard
 v1.0.0  | Initial release.
+
