@@ -64,6 +64,6 @@ Before reporting errors:
 - Check if you are using the latest version of the module. If not, see if updating fixes the issue.
 
 To report an issue:
-- Please report errors by opening an issue on [GitHub](https://github.com/grezniczek/redcap-javascript-injector/issues) or on the community site (please tag @gunther.rezniczek). 
+- Please report errors by opening an issue on [GitHub](https://github.com/grezniczek/redcap_javascript_injector/issues) or on the community site (please tag @gunther.rezniczek). 
 - Include essential details about your REDCap installation such as **version** and platform (operating system, PHP version).
 - If the problem occurs only in conjunction with another external module, please provide its details (you may also want to report the issue to that module's authors).
