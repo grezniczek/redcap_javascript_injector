@@ -32,6 +32,10 @@ class ExternalModule extends AbstractExternalModule {
         else if (PAGE === "DataEntry/record_home.php" && isset($_GET["id"])) {
             $this->injectJS("rhp", null);
         }
+        // All project pages.
+        if ($project_id !== null) {
+            $this->injectJS("all", null);
+        }
     }
 
     /**
@@ -50,7 +54,13 @@ class ExternalModule extends AbstractExternalModule {
         }
 
         foreach ($settings["js"] as $row) {
-            if (!empty($row["js_enabled"]) && in_array($row["js_type"], ["all", $type]) && ($instrument == null || !array_filter($row["js_instruments"]) || in_array($instrument, $row["js_instruments"]))) {
+            if (empty($row["js_enabled"])) continue;
+            $inject = strpos($row["js_type"], $type) !== false;
+            if (strpos("survey,data_entry", $row["js_type"]) !== false) {
+                // Check instrument.
+                $inject = $inject && (!array_filter($row["js_instruments"]) || in_array($instrument, $row["js_instruments"], true));
+            }
+            if ($inject) {
                 echo "<script>" . $row["js_code"] . "</script>";
             }
         }
