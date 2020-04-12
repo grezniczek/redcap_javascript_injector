@@ -13,7 +13,7 @@ Version 1 - 2020-04-12
 1. Using an admin account, configure the module:
    - Create JS Code snippets for each for the pages listed under _Apply to_.
    - Turn on _Enabled_ for each.
-   - The snippet should read `console.log('_Page type_')`, where _Page type_ is the same as the active choice in _Apply to_.
+   - The snippet should read `console.log('Page type')`, where _Page type_ is the same as the active choice in _Apply to_.
    - For the _Surveys_ injection, limit to the **first** survey instrument.
    - For the _Data Entry Pages_ injection, limit to the second survey instrument.
 1. Press F12 to open the browser tools and switch to the console.
