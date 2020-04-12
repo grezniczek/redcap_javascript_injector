@@ -58,8 +58,12 @@
                             "name": "Data Entry Pages"
                         },
                         {
-                            "value": "all",
+                            "value": "survey,data_entry",
                             "name": "Both, Surveys and Data Entry Pages"
+                        },
+                        {
+                            "value": "all",
+                            "name": "All project pages"
                         }
                     ]
                 },
