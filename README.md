@@ -24,6 +24,8 @@ If more than one snippet is injected into the same page, the injection occurs in
 
 _Note:_ Due to a limitation in the EM configuration dialog, branching logic does not work for nested elements, and thus the instrument selection box cannot be hidden when not applicable (in case of _Project Home Page_, _Record Status Dashboard_, _Add / Edit Records_, and _Record Home Page_).
 
+In the system configuration, admins can set this module's project configurations to be accessible only to super users.
+
 ## Acknowledgments
 
 This external module is basically just a modification of the [REDCap CSS Injector](https://github.com/ctsit/redcap_css_injector) module.
@@ -36,6 +38,7 @@ Instructions for testing the module can be found [here](?prefix=redcap_javascrip
 
 Version | Description
 ------- | ------------------
-1.1.1 | Fix the _All project pages_ behavior that was broken in version 1.1.0.<br>Disable branching logic.<br>Add instructions for testing the module.
+1.1.2   | Add system setting for limiting project configuration access to super users only.
+1.1.1   | Fix the _All project pages_ behavior that was broken in version 1.1.0.<br>Disable branching logic.<br>Add instructions for testing the module.
 1.1.0   | New feature: Inject JS on more project pages: _Project Home Page_, _Record Home Page_, _Add / Edit Records_, and _Record Status Dashboard_.
 1.0.0   | Initial release.
