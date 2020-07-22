@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "..\\..\\external_modules",
+			"name": "EM Framework"
+		}
+	],
+	"settings": {
+		"php.suggest.basic": false
+	}
+}
