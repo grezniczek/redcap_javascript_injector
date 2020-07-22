@@ -10,6 +10,11 @@ use ExternalModules\ExternalModules;
  */
 class ExternalModule extends AbstractExternalModule {
 
+    function redcap_module_configure_button_display() {
+        if ($this->getSystemSetting("su_only") && !SUPER_USER) return null;
+        return true;
+    }
+
     function redcap_data_entry_form_top($project_id, $record = null, $instrument, $event_id, $group_id = null, $repeat_instance = 1) {
         $this->injectJS("data_entry", $instrument);
     }

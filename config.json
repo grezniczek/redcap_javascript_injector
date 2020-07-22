@@ -15,6 +15,13 @@
             "institution": "Ruhr-Universität Bochum"
         }
     ],
+    "system-settings": [
+        {
+            "name": "Allow only super-users to configure this module in projects",
+            "key": "su_only",
+            "type": "checkbox"
+        }
+    ],
     "project-settings": [
         {
             "name": "JS Code",
