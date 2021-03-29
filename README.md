@@ -38,6 +38,7 @@ Instructions for testing the module can be found [here](?prefix=redcap_javascrip
 
 Version | Description
 ------- | ------------------
+1.1.3   | Fix an issue where a (silent, but logged) exception would be thrown.
 1.1.2   | Add system setting for limiting project configuration access to super users only.
 1.1.1   | Fix the _All project pages_ behavior that was broken in version 1.1.0.<br>Disable branching logic.<br>Add instructions for testing the module.
 1.1.0   | New feature: Inject JS on more project pages: _Project Home Page_, _Record Home Page_, _Add / Edit Records_, and _Record Status Dashboard_.

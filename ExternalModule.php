@@ -112,7 +112,8 @@ class ExternalModule extends AbstractExternalModule {
         foreach ($settings as $setting) {
             $key = $setting['key'];
             $value = $values[$key]['value'];
-
+            if ($value == null) continue;
+            
             foreach ($inherited_deltas as $delta) {
                 $value = $value[$delta];
             }
