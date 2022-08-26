@@ -69,6 +69,18 @@
                             "name": "Both, Surveys and Data Entry Pages"
                         },
                         {
+                            "value": "report",
+                            "name": "Reports"
+                        },
+                        {
+                            "value": "db",
+                            "name": "Project Dashboards (authenticated)"
+                        },
+                        {
+                            "value": "dbp",
+                            "name": "Project Dashboards (public)"
+                        },
+                        {
                             "value": "all",
                             "name": "All project pages"
                         }

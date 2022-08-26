@@ -37,6 +37,15 @@ class ExternalModule extends AbstractExternalModule {
         else if (PAGE === "DataEntry/record_home.php" && isset($_GET["id"])) {
             $this->injectJS("rhp", null);
         }
+        else if (strpos(PAGE, "ProjectDashController:view") !== false && isset($_GET["dash_id"])) {
+            $this->injectJS("db", null);
+        }
+        else if (strpos(PAGE, "surveys/index.php") !== false && isset($_GET["__dashboard"])) {
+            $this->injectJS("dbp", null);
+        }
+        else if (strpos(PAGE, "DataExport/index.php") !== false && isset($_GET["report_id"])) {
+            $this->injectJS("report", null);
+        }
         // All project pages.
         if ($project_id !== null) {
             $this->injectJS("all", null);
