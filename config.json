@@ -8,6 +8,7 @@
         "redcap_project_home_page",
         "redcap_every_page_top"
     ],
+    "enable-every-page-hooks-on-system-pages": true,
     "authors": [
         {
             "name": "Günther Rezniczek",
@@ -17,9 +18,122 @@
     ],
     "system-settings": [
         {
-            "name": "Allow only super-users to configure this module in projects",
+            "name": "<b>Allow only super-users to configure this module in projects</b>",
             "key": "su_only",
             "type": "checkbox"
+        },
+        {
+            "name": "<b>Enable system-defined JavaScript injections:</b><br><i>Attention:</i> Note that for any injections targeted for project contexts, these will only work if this module is enabled in the projects. To achieve this without exposing this module's project configuration too widely, it is recommended to turn on <b>Enable module on all projects by default</b> and <b>Hide this module from non-admins in the list of enabled modules on each project</b> (and then enable visibility in the projects where the module should be exposed)",
+            "key": "sys-injections",
+            "type": "checkbox"
+        },
+        {
+            "name": "JS Code",
+            "key": "sys-js",
+            "type": "sub_settings",
+            "repeatable": true,
+            "branchingLogic": {
+                "field": "sys-injections",
+                "value": true
+            },
+            "sub_settings": [
+                {
+                    "name": "<b>Enabled in system contexts:</b><br>Limit to these scopes",
+                    "key": "sys-js_enabled_system",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "All system pages",
+                    "key": "sys-context_all",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Control Center",
+                    "key": "sys-context_cc",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Browse Projects",
+                    "key": "sys-context_browseprojects",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Browse Users",
+                    "key": "sys-context_browseusers",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Edit user info",
+                    "key": "sys-context_edituser",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Email Users",
+                    "key": "sys-context_emailusers",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "<b>Enabled in project contexts:</b><br>Limit to these project pages",
+                    "key": "sys-js_enabled_projects",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "All project pages",
+                    "key": "proj-context_all",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Project Home Page",
+                    "key": "proj-context_php",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Record Status Dashboard",
+                    "key": "proj-context_rsd",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Add / Edit Records",
+                    "key": "proj-context_aer",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Record Home Page",
+                    "key": "proj-context_rhp",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Data Entry Pages",
+                    "key": "proj-context_data_entry",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Surveys",
+                    "key": "proj-context_survey",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Reports",
+                    "key": "proj-context_report",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Project Dashboards (authenticated)",
+                    "key": "proj-context_db",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Project Dashboards (public)",
+                    "key": "proj-context_dbp",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "JavaScript Snippet (without &lt;script&gt; tags)",
+                    "key": "sys-js_code",
+                    "required": true,
+                    "type": "textarea"
+                }
+            ]
         }
     ],
     "project-settings": [
