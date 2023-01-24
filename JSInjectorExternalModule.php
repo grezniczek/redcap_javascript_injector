@@ -1,6 +1,6 @@
 <?php
 
-namespace RUB\JSInjector\ExternalModule;
+namespace DE\RUB\JSInjectorExternalModule;
 
 use ExternalModules\AbstractExternalModule;
 use ExternalModules\ExternalModules;
@@ -8,7 +8,11 @@ use ExternalModules\ExternalModules;
 /**
  * ExternalModule class for Javascript Injector.
  */
-class ExternalModule extends AbstractExternalModule {
+class JSInjectorExternalModule extends AbstractExternalModule {
+
+    function redcap_module_link_check_display($project_id, $link) {
+        return null;
+    }
 
     function redcap_module_configure_button_display() {
         if ($this->getSystemSetting("su_only") && !SUPER_USER) return null;

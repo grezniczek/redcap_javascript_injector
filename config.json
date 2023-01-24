@@ -1,6 +1,6 @@
 {
     "name": "REDCap JavaScript Injector",
-    "namespace": "RUB\\JSInjector\\ExternalModule",
+    "namespace": "DE\\RUB\\JSInjectorExternalModule",
     "description": "Allow project admins to inject JavaScript code into surveys and data entry pages. <strong><a href=\"https://github.com/grezniczek/redcap-javascript-injector\">See full documentation here</a></strong>.",
     "permissions": [
         "redcap_data_entry_form_top",
@@ -103,9 +103,9 @@
         }
     ],
     "compatibility": {
-        "php-version-min": "5.4.0",
+        "php-version-min": "7.4.0",
         "php-version-max": "",
-        "redcap-version-min": "8.1.0",
+        "redcap-version-min": "12.0.0",
         "redcap-version-max": ""
      }
 }
