@@ -82,6 +82,44 @@
                     ]
                 },
                 {
+                    "name": "To-Do List",
+                    "key": "sys-context_todo",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Language File Creator/Updater",
+                    "key": "sys-context_lang",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
                     "name": "Browse Projects",
                     "key": "sys-context_browseprojects",
                     "type": "dropdown",
@@ -117,9 +155,10 @@
                             "value": "exclude",
                             "name": "Always off"
                         }
-                    ]                },
+                    ]
+                },
                 {
-                    "name": "Edit user info",
+                    "name": "Create/Edit Single User",
                     "key": "sys-context_edituser",
                     "type": "dropdown",
                     "choices": [
