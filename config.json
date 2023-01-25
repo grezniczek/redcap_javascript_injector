@@ -24,28 +24,20 @@
             "type": "checkbox"
         },
         {
-            "name": "<b>Enable system-defined JavaScript injections:</b><br><i>Attention:</i> Note that for any injections targeted at project contexts, these will only work if this module is enabled in the projects. To achieve this without exposing this module's project configuration too widely, it is recommended to turn on <b>Enable module on all projects by default</b> and <b>Hide this module from non-admins in the list of enabled modules on each project</b> (and then enable visibility in the projects where the module should be exposed)",
+            "name": "<b>Note:</b> When system-defined JavaScript injections are targeted at project contexts, they will only work in projects where this module is enabled. To achieve <i>global</i> injections without exposing this module's project configuration too widely, it is recommended to turn on <b>Enable module on all projects by default</b> and <b>Hide this module from non-admins in the list of enabled modules on each project</b>, and then enable visibility in only the projects where the module should be exposed for project-specific purposes.",
             "key": "sys-enable_injections",
-            "type": "checkbox"
+            "type": "descriptive"
         },
         {
             "name": "<b>Provide an instance of the JavascriptModuleObject:</b><br>When enabled, a JavascriptModuleObject will be instantiated and then can be used in JS snippets. The JavascriptModuleObject is accessible at <i>#JSMO#</i>",
             "key": "sys-jsmo",
-            "type": "checkbox",
-            "branchingLogic": {
-                "field": "sys-enable_injections",
-                "value": true
-            }
+            "type": "checkbox"
         },
         {
             "name": "JS Code Injections",
             "key": "sys-injections",
             "type": "sub_settings",
             "repeatable": true,
-            "branchingLogic": {
-                "field": "sys-enable_injections",
-                "value": true
-            },
             "sub_settings": [
                 {
                     "name": "<b>Enabled in system contexts:</b>",
