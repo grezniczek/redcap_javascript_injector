@@ -39,12 +39,14 @@ class JSInjectorExternalModule extends AbstractExternalModule {
         $this->injectJS("php", null);
     }
     
-    // Determine context
+    // Determine context and inject
     function redcap_every_page_top ($project_id) {
         $page = defined("PAGE") ? PAGE : "";
         $instrument = null;
         $context = [
             "cc" => false,
+            "todo" => false,
+            "langs" => false,
             "browseprojects" => false,
             "browseusers" => false,
             "edituser" => false,
@@ -60,19 +62,52 @@ class JSInjectorExternalModule extends AbstractExternalModule {
             "db" => false,
             "dbp" => false,
         ];
-    
+
         // System context
         if ($project_id == null) {
-
+            if (!defined("USERID")) {
+                $context["login"] = true;
+            }
+            else {
+                if ($page === "ToDoList/index.php") {
+                    $context["todo"] = true;
+                    $context["cc"] = true;
+                }
+                else if ($page === "LanguageUpdater/index.php") {
+                    $context["langs"] = true;
+                    $context["cc"] = true;
+                }
+                else if ($page === "ControlCenter/view_projects.php") {
+                    $context["browseprojects"] = true;
+                    $context["cc"] = true;
+                }
+                else if ($page === "ControlCenter/view_users.php") {
+                    $context["browseusers"] = true;
+                    $context["cc"] = true;
+                }
+                else if ($page === "ControlCenter/create_user.php") {
+                    $context["edituser"] = true;
+                    $context["cc"] = true;
+                }
+                else if ($page === "ControlCenter/email_users.php") {
+                    $context["emailusers"] = true;
+                    $context["cc"] = true;
+                }
+                else if (starts_with($page, "ControlCenter/")) {
+                    $context["cc"] = true;
+                }
+                else if ($page === "FhirStatsController:index") {
+                    $context["cc"] = true;
+                }
+                else if ($page === "MultiLanguageController:systemConfig") {
+                    $context["cc"] = true;
+                }
+            }
         }
         // Project context
         else {
             $Proj = new \Project();
-            if ($page === "DataEntry/index.php") {
-                $context["data_entry"] = true;
-                $instrument = isset($Proj->forms[$_GET["page"]]) ? $_GET["page"] : null;
-            }
-            else if ($page === "surveys/index.php") {
+            if ($page === "surveys/index.php") {
                 if (isset($_GET["page"])) {
                     $context["survey"] = true;
                     $instrument = isset($Proj->forms[$_GET["page"]]) ? $_GET["page"] : null;
@@ -81,42 +116,51 @@ class JSInjectorExternalModule extends AbstractExternalModule {
                     $context["dbp"] = true;
                 }
             }
-            else if ($page == "index.php") {
-                $context["php"] = true;
+            else if (!defined("USERID")) {
+                $context["login"] = true;
             }
-            else if ($page == "DataEntry/record_status_dashboard.php") {
-                $context["rsd"] = true;
-            }
-            else if ($page == "DataEntry/record_home.php") {
-                if (isset($_GET["id"])) {
-                    $context["rhp"] = true;
+            else {
+                if ($page === "DataEntry/index.php") {
+                    $context["data_entry"] = true;
+                    $instrument = isset($Proj->forms[$_GET["page"]]) ? $_GET["page"] : null;
                 }
-                else {
-                    $context["aer"] = true;
+                else if ($page == "index.php") {
+                    $context["php"] = true;
                 }
-            }
-            else if ($page == "ProjectDashController:view") {
-                $context["db"] = true;
-            }
-            else if ($page == "DataExport/index.php" && isset($_GET["report_id"]) && !isset($_GET["addedit"])) {
-                $context["report"] = true;
+                else if ($page == "DataEntry/record_status_dashboard.php") {
+                    $context["rsd"] = true;
+                }
+                else if ($page == "DataEntry/record_home.php") {
+                    if (isset($_GET["id"])) {
+                        $context["rhp"] = true;
+                    }
+                    else {
+                        $context["aer"] = true;
+                    }
+                }
+                else if ($page == "ProjectDashController:view") {
+                    $context["db"] = true;
+                }
+                else if ($page == "DataExport/index.php" && isset($_GET["report_id"]) && !isset($_GET["addedit"])) {
+                    $context["report"] = true;
+                }
             }
         }
-        $this->injectJS($context, $instrument);
+        // Inject
+        $this->injectJS($project_id, $context, $instrument);
     }
 
     /**
-     * Inject JS code.
+     * Inject JS code based on context.
      *
-     * @param string $type
-     *   Accepted types: 'data_entry' or 'survey'.
+     * @param string|null $project_id
+     * @param array $context
      * @param string $instrument
-     *   The instrument name.
      */
-    function injectJS($type, $instrument) {
+    function injectJS($project_id, $context, $instrument) {
 
         return;
-        $settings = $this->getFormattedSettings(PROJECT_ID);
+        $settings = $this->getFormattedSettings($project_id);
 
         if (empty($settings["js"])) {
             return;
