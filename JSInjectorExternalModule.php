@@ -10,6 +10,8 @@ use ExternalModules\ExternalModules;
  */
 class JSInjectorExternalModule extends AbstractExternalModule {
 
+    #region Hooks
+
     // Perform settings upgrade to v2 model
     function redcap_module_system_change_version($version, $old_version) {
         if (explode(".", $old_version)[0] * 1 < 2) {
@@ -35,10 +37,6 @@ class JSInjectorExternalModule extends AbstractExternalModule {
         return true;
     }
 
-    function redcap_project_home_page ($project_id) {
-        $this->injectJS("php", null);
-    }
-    
     // Determine context and inject
     function redcap_every_page_top ($project_id) {
         $page = defined("PAGE") ? PAGE : "";
@@ -150,6 +148,8 @@ class JSInjectorExternalModule extends AbstractExternalModule {
         $this->injectJS($project_id, $context, $instrument);
     }
 
+    #endregion
+
     /**
      * Inject JS code based on context.
      *
@@ -160,6 +160,7 @@ class JSInjectorExternalModule extends AbstractExternalModule {
     function injectJS($project_id, $context, $instrument) {
 
         return;
+        $type = "";
         $settings = $this->getFormattedSettings($project_id);
 
         if (empty($settings["js"])) {
@@ -179,64 +180,7 @@ class JSInjectorExternalModule extends AbstractExternalModule {
         }
     }
 
-
-    /**
-     * Converts legacy v1 project settings to the new v2 model
-     * @return void 
-     */
-    private function convert_v1_settings() {
-        $projects = $this->getProjectsWithModuleEnabled(true);
-        // Process each project where the module is enabled
-        foreach ($projects as $pid) {
-            $old = $this->getProjectSettings($pid);
-            if (is_array($old["js"]) && count($old["js"])) {
-                // Prepare new settings format
-                $new = [
-                    "enabled" => true,
-                    "reserved-hide-from-non-admins-in-project-list" => $old["reserved-hide-from-non-admins-in-project-list"],
-                    "proj-jsmo" => false,
-                    // Removes legacy settings
-                    "js" => null,
-                    "js_enabled" => null,
-                    "js_type" => null,
-                    "js_instruments" => null,
-                    "js_code" => null
-                ];
-                foreach ($old["js"] as $i => $_) {
-                    $new["proj-injections"][$i] = true;
-                    $new["proj-enabled"][$i] = $old["js_enabled"][$i];
-                    // Set default contexts
-                    $new["proj-context_all"][$i] = false;
-                    $new["proj-context_php"][$i] = null;
-                    $new["proj-context_rsd"][$i] = null;
-                    $new["proj-context_aer"][$i] = null;
-                    $new["proj-context_rhp"][$i] = null;
-                    $new["proj-context_data_entry"][$i] = null;
-                    $new["proj-context_survey"][$i] = null;
-                    $new["proj-context_report"][$i] = null;
-                    $new["proj-context_db"][$i] = null;
-                    $new["proj-context_dbp"][$i] = null;
-                    // Convert legacy type to contexts
-                    switch ($old["js_type"][$i]) {
-                        case "all":
-                            $new["proj-context_all"][$i] = true;
-                            break;
-                        case "survey,data_entry":
-                            $new["proj-context_data_entry"][$i] = "include";
-                            $new["proj-context_survey"][$i] = "include";
-                            break;
-                        default:
-                            $new["proj-context_" . $old["js_type"][$i]][$i] = "include";
-                            break;
-                    }
-                    $new["proj-instruments"][$i] = $old["js_instruments"][$i];
-                    $new["proj-code"][$i] = $old["js_code"][$i];
-                }
-                // Store converted settings
-                $this->setProjectSettings($new, $pid);
-            }
-        }
-    }
+    #region Settings Parser
 
     /**
      * The code for getFormattedSettings and _getFormattedSettings 
@@ -303,4 +247,70 @@ class JSInjectorExternalModule extends AbstractExternalModule {
 
         return $formatted;
     }
+
+    #endregion
+
+    #region Legacy Conversion
+
+    /**
+     * Converts legacy v1 project settings to the new v2 model
+     * @return void 
+     */
+    private function convert_v1_settings() {
+        $projects = $this->getProjectsWithModuleEnabled(true);
+        // Process each project where the module is enabled
+        foreach ($projects as $pid) {
+            $old = $this->getProjectSettings($pid);
+            if (is_array($old["js"]) && count($old["js"])) {
+                // Prepare new settings format
+                $new = [
+                    "enabled" => true,
+                    "reserved-hide-from-non-admins-in-project-list" => $old["reserved-hide-from-non-admins-in-project-list"],
+                    "proj-jsmo" => false,
+                    // Removes legacy settings
+                    "js" => null,
+                    "js_enabled" => null,
+                    "js_type" => null,
+                    "js_instruments" => null,
+                    "js_code" => null
+                ];
+                foreach ($old["js"] as $i => $_) {
+                    $new["proj-injections"][$i] = true;
+                    $new["proj-enabled"][$i] = $old["js_enabled"][$i];
+                    // Set default contexts
+                    $new["proj-context_all"][$i] = false;
+                    $new["proj-context_php"][$i] = null;
+                    $new["proj-context_rsd"][$i] = null;
+                    $new["proj-context_aer"][$i] = null;
+                    $new["proj-context_rhp"][$i] = null;
+                    $new["proj-context_data_entry"][$i] = null;
+                    $new["proj-context_survey"][$i] = null;
+                    $new["proj-context_report"][$i] = null;
+                    $new["proj-context_db"][$i] = null;
+                    $new["proj-context_dbp"][$i] = null;
+                    // Convert legacy type to contexts
+                    switch ($old["js_type"][$i]) {
+                        case "all":
+                            $new["proj-context_all"][$i] = true;
+                            break;
+                        case "survey,data_entry":
+                            $new["proj-context_data_entry"][$i] = "include";
+                            $new["proj-context_survey"][$i] = "include";
+                            break;
+                        default:
+                            $new["proj-context_" . $old["js_type"][$i]][$i] = "include";
+                            break;
+                    }
+                    $new["proj-instruments"][$i] = $old["js_instruments"][$i];
+                    $new["proj-code"][$i] = $old["js_code"][$i];
+                }
+                // Store converted settings
+                $this->setProjectSettings($new, $pid);
+            }
+        }
+    }
+
+    #endregion
+
+
 }
