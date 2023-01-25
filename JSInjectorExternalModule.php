@@ -145,7 +145,7 @@ class JSInjectorExternalModule extends AbstractExternalModule {
             }
         }
         // Inject
-        $this->injectJS($project_id, $context, $instrument);
+        $this->inject_js($project_id, $context, $instrument);
     }
 
     #endregion
@@ -157,12 +157,12 @@ class JSInjectorExternalModule extends AbstractExternalModule {
      * @param array $context
      * @param string $instrument
      */
-    function injectJS($project_id, $context, $instrument) {
+    function inject_js($project_id, $context, $instrument) {
+
+        $settings = $this->parse_settings($project_id, array_keys($context));
 
         return;
         $type = "";
-        $settings = $this->getFormattedSettings($project_id);
-
         if (empty($settings["js"])) {
             return;
         }
@@ -183,22 +183,28 @@ class JSInjectorExternalModule extends AbstractExternalModule {
     #region Settings Parser
 
     /**
-     * The code for getFormattedSettings and _getFormattedSettings 
-     * originates from https://github.com/ctsit/redcap_css_injector
-     * as of March 27, 2019.
+     * Parses project and system settings into a useable format
+     * @param string|null $project_id 
+     * @return array 
      */
+    function parse_settings($project_id = null, $contexts) {
 
-    /**
-     * Formats settings into a hierarchical key-value pair array.
-     * 
-     * @param int $project_id
-     *   Enter a project ID to get project settings.
-     *   Leave blank to get system settings.
-     *
-     * @return array
-     *   The formatted settings.
-     */
-    function getFormattedSettings($project_id = null) {
+        $snippets = [];
+
+        // System settings
+        $ss = $this->getSystemSettings();
+        $sys_jsmo = $ss["sys-jsmo"]["system_value"] == true;
+        foreach ($ss["sys-injections"]["system_value"] as $i => $_) {
+            // Skip non-enabled injections
+            if ($ss["sys-enabled"]["system_value"] !== true) continue;
+            $snippet = [ "jsmo" => $sys_jsmo ];
+            $snippet["code"] = $ss["sys-code"]["system_value"][$i];
+
+        }
+
+        // Project settings
+        $ps = $this->getProjectSettings($project_id);
+
         $settings = $this->getConfig();
 
         if ($project_id) {
