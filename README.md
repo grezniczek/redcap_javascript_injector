@@ -40,15 +40,11 @@ _Note:_ Due to a limitation in the EM configuration dialog, branching logic does
 
 The original version of this external module was basically just a modified version of the [REDCap CSS Injector](https://github.com/ctsit/redcap_css_injector) module. Version 2 is a major overhaul. 
 
-## Testing
-
-Instructions for testing the module can be found [here](?prefix=redcap_javascript_injector&page=tests/JavaScriptInjectorManualTest.md).
-
 ## Changelog
 
 Version | Description
 ------- | ------------------
-2.0.0   | Major new feature: System and pan-project injections.
+2.0.0   | Major new feature: System and pan-project injections. Redesigned page limitation setup (old settings will be migrated automatically).
 1.1.4   | Added additional injection options.
 1.1.3   | Fix an issue where a (silent, but logged) exception would be thrown.
 1.1.2   | Add system setting for limiting project configuration access to super users only.
