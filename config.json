@@ -25,28 +25,37 @@
         },
         {
             "name": "<b>Enable system-defined JavaScript injections:</b><br><i>Attention:</i> Note that for any injections targeted at project contexts, these will only work if this module is enabled in the projects. To achieve this without exposing this module's project configuration too widely, it is recommended to turn on <b>Enable module on all projects by default</b> and <b>Hide this module from non-admins in the list of enabled modules on each project</b> (and then enable visibility in the projects where the module should be exposed)",
-            "key": "sys-injections",
+            "key": "sys-enable_injections",
             "type": "checkbox"
         },
         {
             "name": "<b>Provide an instance of the JavascriptModuleObject:</b><br>When enabled, a JavascriptModuleObject will be instantiated and then can be used in JS snippets. The JavascriptModuleObject is accessible at <i>#JSMO#</i>",
             "key": "sys-jsmo",
-            "type": "checkbox"
+            "type": "checkbox",
+            "branchingLogic": {
+                "field": "sys-enable_injections",
+                "value": true
+            }
         },
         {
-            "name": "JS Code",
-            "key": "sys-js",
+            "name": "JS Code Injections",
+            "key": "sys-injections",
             "type": "sub_settings",
             "repeatable": true,
             "branchingLogic": {
-                "field": "sys-injections",
+                "field": "sys-enable_injections",
                 "value": true
             },
             "sub_settings": [
                 {
-                    "name": "<b>Enabled in system contexts:</b><br>Limit to these scopes",
-                    "key": "sys-js_enabled_system",
+                    "name": "<b>Enabled in system contexts:</b>",
+                    "key": "sys-enabled",
                     "type": "checkbox"
+                },
+                {
+                    "name": "<i>Apply and/or limit to these system pages:</i>",
+                    "key": "sys-limit",
+                    "type": "descriptive"
                 },
                 {
                     "name": "All system pages",
@@ -89,7 +98,8 @@
                             "value": "exclude",
                             "name": "Always off"
                         }
-                    ]                },
+                    ]
+                },
                 {
                     "name": "Browse Users",
                     "key": "sys-context_browseusers",
@@ -125,7 +135,8 @@
                             "value": "exclude",
                             "name": "Always off"
                         }
-                    ]                },
+                    ]
+                },
                 {
                     "name": "Email Users",
                     "key": "sys-context_emailusers",
@@ -146,13 +157,8 @@
                     ]
                 },
                 {
-                    "name": "<b>Enabled in project contexts:</b><br>Limit to these project pages",
-                    "key": "sys-js_enabled_projects",
-                    "type": "checkbox"
-                },
-                {
-                    "name": "All project pages",
-                    "key": "proj-context_all",
+                    "name": "Login Page (no pid parameter)",
+                    "key": "sys-context_login",
                     "type": "dropdown",
                     "choices": [
                         {
@@ -167,7 +173,249 @@
                             "value": "exclude",
                             "name": "Always off"
                         }
-                    ]                },
+                    ]
+                },
+                {
+                    "name": "<b>Enabled in project contexts</b>",
+                    "key": "sys-proj-enabled",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "<i>Appy and/or limit to these project pages:</i>",
+                    "key": "sys-proj-limit",
+                    "type": "descriptive"
+                },
+                {
+                    "name": "All project pages",
+                    "key": "sys-proj-context_all",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Project Home Page",
+                    "key": "sys-proj-context_php",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Record Status Dashboard",
+                    "key": "sys-proj-context_rsd",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Add / Edit Records",
+                    "key": "sys-proj-context_aer",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Record Home Page",
+                    "key": "sys-proj-context_rhp",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Data Entry Pages",
+                    "key": "sys-proj-context_data_entry",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Surveys",
+                    "key": "sys-proj-context_survey",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Reports",
+                    "key": "sys-proj-context_report",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Project Dashboards (authenticated)",
+                    "key": "sys-proj-context_db",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Project Dashboards (public)",
+                    "key": "sys-proj-context_dbp",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Login Page (with pid parameter)",
+                    "key": "sys-proj-context_login",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "JavaScript Snippet (without &lt;script&gt; tags)",
+                    "key": "sys-code",
+                    "required": true,
+                    "type": "textarea"
+                }
+            ]
+        }
+    ],
+    "project-settings": [
+        {
+            "name": "<b>Provide an instance of the JavascriptModuleObject:</b><br>When enabled, a JavascriptModuleObject will be instantiated and then can be used in JS snippets. The JavascriptModuleObject is accessible at <i>#JSMO#</i>",
+            "key": "proj-jsmo",
+            "type": "checkbox"
+        },
+        {
+            "name": "JS Code Injections",
+            "key": "proj-injections",
+            "type": "sub_settings",
+            "repeatable": true,
+            "sub_settings": [
+                {
+                    "name": "<b>Enabled</b>",
+                    "key": "proj-enabled",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "<i>Apply and/or limit to these project pages:</i>",
+                    "key": "proj-limit",
+                    "type": "descriptive"
+                },
+                {
+                    "name": "All project pages",
+                    "key": "proj-context_all",
+                    "type": "checkbox"
+                },
                 {
                     "name": "Project Home Page",
                     "key": "proj-context_php",
@@ -185,7 +433,8 @@
                             "value": "exclude",
                             "name": "Always off"
                         }
-                    ]                },
+                    ]
+                },
                 {
                     "name": "Record Status Dashboard",
                     "key": "proj-context_rsd",
@@ -203,7 +452,8 @@
                             "value": "exclude",
                             "name": "Always off"
                         }
-                    ]                },
+                    ]
+                },
                 {
                     "name": "Add / Edit Records",
                     "key": "proj-context_aer",
@@ -221,7 +471,8 @@
                             "value": "exclude",
                             "name": "Always off"
                         }
-                    ]                },
+                    ]
+                },
                 {
                     "name": "Record Home Page",
                     "key": "proj-context_rhp",
@@ -239,7 +490,8 @@
                             "value": "exclude",
                             "name": "Always off"
                         }
-                    ]                },
+                    ]
+                },
                 {
                     "name": "Data Entry Pages",
                     "key": "proj-context_data_entry",
@@ -257,7 +509,8 @@
                             "value": "exclude",
                             "name": "Always off"
                         }
-                    ]                },
+                    ]
+                },
                 {
                     "name": "Surveys",
                     "key": "proj-context_survey",
@@ -275,7 +528,8 @@
                             "value": "exclude",
                             "name": "Always off"
                         }
-                    ]                },
+                    ]
+                },
                 {
                     "name": "Reports",
                     "key": "proj-context_report",
@@ -293,7 +547,8 @@
                             "value": "exclude",
                             "name": "Always off"
                         }
-                    ]                },
+                    ]
+                },
                 {
                     "name": "Project Dashboards (authenticated)",
                     "key": "proj-context_db",
@@ -330,95 +585,18 @@
                             "value": "exclude",
                             "name": "Always off"
                         }
-                    ]                },
-                {
-                    "name": "JavaScript Snippet (without &lt;script&gt; tags)",
-                    "key": "sys-js_code",
-                    "required": true,
-                    "type": "textarea"
-                }
-            ]
-        }
-    ],
-    "project-settings": [
-        {
-            "name": "<b>Provide an instance of the JavascriptModuleObject:</b><br>When enabled, a JavascriptModuleObject will be instantiated and then can be used in JS snippets. The JavascriptModuleObject is accessible at <i>#JSMO#</i>",
-            "key": "proj-jsmo",
-            "type": "checkbox"
-        },
-        {
-            "name": "JS Code",
-            "key": "js",
-            "type": "sub_settings",
-            "repeatable": true,
-            "sub_settings": [
-                {
-                    "name": "Enabled",
-                    "key": "js_enabled",
-                    "type": "checkbox"
-                },
-                {
-                    "name": "Apply to",
-                    "key": "js_type",
-                    "type": "radio",
-                    "required": true,
-                    "choices": [
-                        {
-                            "value": "php",
-                            "name": "Project Home Page"
-                        },
-                        {
-                            "value": "rsd",
-                            "name": "Record Status Dashboard"
-                        },
-                        {
-                            "value": "aer",
-                            "name": "Add / Edit Records"
-                        },
-                        {
-                            "value": "rhp",
-                            "name": "Record Home Page"
-                        },
-                        {
-                            "value": "survey",
-                            "name": "Surveys"
-                        },
-                        {
-                            "value": "data_entry",
-                            "name": "Data Entry Pages"
-                        },
-                        {
-                            "value": "survey,data_entry",
-                            "name": "Both, Surveys and Data Entry Pages"
-                        },
-                        {
-                            "value": "report",
-                            "name": "Reports"
-                        },
-                        {
-                            "value": "db",
-                            "name": "Project Dashboards (authenticated)"
-                        },
-                        {
-                            "value": "dbp",
-                            "name": "Project Dashboards (public)"
-                        },
-                        {
-                            "value": "all",
-                            "name": "All project pages"
-                        }
                     ]
                 },
                 {
-                    "name": "Apply to the following instruments (leave blank to apply to all instruments)",
-                    "key": "js_instruments",
+                    "name": "In case of <i>Data Entry</i> and <i>Survey</i> pages only, only apply for this specific instrument (leave blank to apply to all instruments)",
+                    "key": "proj-instruments",
                     "type": "form-list",
                     "repeatable": true,
                     "select2": true
                 },
                 {
                     "name": "JavaScript Snippet (without &lt;script&gt; tags)",
-                    "key": "js_code",
+                    "key": "proj-code",
                     "required": true,
                     "type": "textarea"
                 }
