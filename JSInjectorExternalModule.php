@@ -10,8 +10,15 @@ use ExternalModules\ExternalModules;
  */
 class JSInjectorExternalModule extends AbstractExternalModule {
 
-    function redcap_module_link_check_display($project_id, $link) {
-        return null;
+    function redcap_module_configuration_settings($project_id, $settings) {
+        $key = $project_id == null ? "sys-jsmo" : "proj-jsmo";
+        $jsmo = $this->getJavascriptModuleObjectName();
+        foreach ($settings as &$setting) {
+            if ($setting["key"] === $key) {
+                $setting["name"] = str_replace("#JSMO#", $jsmo, $setting["name"]);
+            }
+        }
+        return $settings;
     }
 
     function redcap_module_configure_button_display() {
