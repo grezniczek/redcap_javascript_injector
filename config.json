@@ -212,6 +212,30 @@
                     "type": "checkbox"
                 },
                 {
+                    "name": "Limit to only some projects:",
+                    "key": "sys-proj-limittype",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "all",
+                            "name": "Inject in all projects"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Inject only in the projects listed below"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Inject in projects except those listed below"
+                        }
+                    ]
+                },
+                {
+                    "name": "List of projects to limit injection to or to exclude from injection:<br><small>Provide a comma-separated list of project ids</small>",
+                    "key": "sys-proj-limitlist",
+                    "type": "textarea"
+                },
+                {
                     "name": "<i>Appy and/or limit to these project pages:</i>",
                     "key": "sys-proj-limit",
                     "type": "descriptive"
@@ -414,7 +438,6 @@
                 {
                     "name": "JavaScript Snippet (without &lt;script&gt; tags)",
                     "key": "sys-code",
-                    "required": true,
                     "type": "textarea"
                 }
             ]
@@ -628,7 +651,6 @@
                 {
                     "name": "JavaScript Snippet (without &lt;script&gt; tags)",
                     "key": "proj-code",
-                    "required": true,
                     "type": "textarea"
                 }
             ]
