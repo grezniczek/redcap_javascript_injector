@@ -29,18 +29,8 @@
             "type": "descriptive"
         },
         {
-            "name": "<b>Provide an instance of the JavascriptModuleObject:</b><br>When enabled, a JavascriptModuleObject (JSMO) will be instantiated and then can be used in JS snippets. The JavascriptModuleObject is accessible at <i>#JSMO#</i>",
-            "key": "sys-jsmo",
-            "type": "checkbox"
-        },
-        {
-            "name": "<b>Enable debug logging:</b><br>When enabled, injection of snippets and the JSMO will be announced on the browser console. This may be helpful for troubleshooting",
-            "key": "sys-debug",
-            "type": "checkbox"
-        },
-        {
-            "name": "JS Code Injections",
-            "key": "sys-injections",
+            "name": "<b style='font-size:120%;'>JavaScript Snippet</b>",
+            "key": "sys-snippet",
             "type": "sub_settings",
             "repeatable": true,
             "sub_settings": [
@@ -55,7 +45,37 @@
                     "type": "checkbox"
                 },
                 {
-                    "name": "<i>Apply and/or limit to these system pages:</i>",
+                    "name": "<b>Enabled in project contexts</b>",
+                    "key": "sys-proj-enabled",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Add the JavascriptModuleObject",
+                    "key": "sys-jsmo",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "The JavascriptModuleObject (JSMO) is accesible at <i>#JSMO#</i>.",
+                    "key": "sys-jsmo-info",
+                    "type": "descriptive"
+                },
+                {
+                    "name": "Enable debug logging",
+                    "key": "sys-debug",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Debug logging outputs information useful for troubleshooting to the console",
+                    "key": "sys-debug-info",
+                    "type": "descriptive"
+                },
+                {
+                    "name": "JavaScript Code (without &lt;script&gt; tags)",
+                    "key": "sys-code",
+                    "type": "textarea"
+                },
+                {
+                    "name": "<i style='background-color:lightyellow;'>Apply and/or limit to these system pages:</i>",
                     "key": "sys-pages",
                     "type": "descriptive"
                 },
@@ -65,7 +85,7 @@
                     "type": "checkbox"
                 },
                 {
-                    "name": "Control Center",
+                    "name": "Control Center (includes all sub-pages)",
                     "key": "sys-context_cc",
                     "type": "dropdown",
                     "choices": [
@@ -217,9 +237,9 @@
                     ]
                 },
                 {
-                    "name": "<b>Enabled in project contexts</b>",
-                    "key": "sys-proj-enabled",
-                    "type": "checkbox"
+                    "name": "<i style='background-color:lightyellow;'>Appy and/or limit to these projects and project pages:</i>",
+                    "key": "sys-proj-pages",
+                    "type": "descriptive"
                 },
                 {
                     "name": "Limit to only some projects",
@@ -227,7 +247,7 @@
                     "type": "dropdown",
                     "choices": [
                         {
-                            "value": "all",
+                            "value": "",
                             "name": "Inject in all projects"
                         },
                         {
@@ -244,11 +264,6 @@
                     "name": "List of projects to limit injection to or to exclude from injection:<br><small>Provide a comma-separated list of project ids</small>",
                     "key": "sys-proj-list",
                     "type": "textarea"
-                },
-                {
-                    "name": "<i>Appy and/or limit to these project pages:</i>",
-                    "key": "sys-proj-pages",
-                    "type": "descriptive"
                 },
                 {
                     "name": "All project pages",
@@ -425,29 +440,14 @@
                             "name": "Always off"
                         }
                     ]
-                },
-                {
-                    "name": "JavaScript Snippet (without &lt;script&gt; tags)",
-                    "key": "sys-code",
-                    "type": "textarea"
                 }
             ]
         }
     ],
     "project-settings": [
         {
-            "name": "<b>Provide an instance of the JavascriptModuleObject:</b><br>When enabled, a JavascriptModuleObject will be instantiated and then can be used in JS snippets. The JavascriptModuleObject is accessible at <i>#JSMO#</i>",
-            "key": "proj-jsmo",
-            "type": "checkbox"
-        },
-        {
-            "name": "<b>Enable debug logging:</b><br>When enabled, injection of snippets and the JSMO will be announced on the browser console. This may be helpful for troubleshooting",
-            "key": "proj-debug",
-            "type": "checkbox"
-        },
-        {
-            "name": "JS Code Injections",
-            "key": "proj-injections",
+            "name": "<b>JavaScript Snippet</b>",
+            "key": "proj-snippet",
             "type": "sub_settings",
             "repeatable": true,
             "sub_settings": [
@@ -462,7 +462,32 @@
                     "type": "checkbox"
                 },
                 {
-                    "name": "<i>Apply and/or limit to these project pages:</i>",
+                    "name": "Add the JavascriptModuleObject:",
+                    "key": "proj-jsmo",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "The JavascriptModuleObject (JSMO) is accesible at <i>#JSMO#</i>.",
+                    "key": "proj-jsmo-info",
+                    "type": "descriptive"
+                },
+                {
+                    "name": "Enable debug logging",
+                    "key": "proj-debug",
+                    "type": "checkbox"
+                },
+                {
+                    "name": "Debug logging outputs information useful for troubleshooting to the console",
+                    "key": "proj-debug-info",
+                    "type": "descriptive"
+                },
+                {
+                    "name": "JavaScript Code (without &lt;script&gt; tags)",
+                    "key": "proj-code",
+                    "type": "textarea"
+                },
+                {
+                    "name": "<i style='background-color:lightyellow;'>Apply and/or limit to these project pages:</i>",
                     "key": "proj-limit",
                     "type": "descriptive"
                 },
@@ -653,11 +678,6 @@
                     "type": "form-list",
                     "repeatable": true,
                     "select2": true
-                },
-                {
-                    "name": "JavaScript Snippet (without &lt;script&gt; tags)",
-                    "key": "proj-code",
-                    "type": "textarea"
                 }
             ]
         }
