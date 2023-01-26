@@ -218,7 +218,7 @@
                     ]
                 },
                 {
-                    "name": "Login Page (all contexts)",
+                    "name": "Login Page",
                     "key": "sys-context_login",
                     "type": "dropdown",
                     "choices": [
@@ -462,7 +462,7 @@
                     "type": "checkbox"
                 },
                 {
-                    "name": "Add the JavascriptModuleObject:",
+                    "name": "Add the JavascriptModuleObject",
                     "key": "proj-jsmo",
                     "type": "checkbox"
                 },
