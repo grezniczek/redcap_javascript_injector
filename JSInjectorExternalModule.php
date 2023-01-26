@@ -10,6 +10,18 @@ use ExternalModules\ExternalModules;
  */
 class JSInjectorExternalModule extends AbstractExternalModule {
 
+    /**
+     * EM Framework (tooling support)
+     * @var \ExternalModules\Framework
+     */
+    private $fw;
+
+    function __construct() {
+        parent::__construct();
+        $this->fw = $this->framework;
+    }
+
+
     #region Hooks
 
     // Perform settings upgrade to v2 model
@@ -159,23 +171,36 @@ class JSInjectorExternalModule extends AbstractExternalModule {
      */
     function inject_js($project_id, $context, $instrument) {
 
+        // Get "work schedule" ;)
         $settings = $this->parse_settings($project_id, array_keys($context));
 
-        return;
-        $type = "";
-        if (empty($settings["js"])) {
-            return;
-        }
-
-        foreach ($settings["js"] as $row) {
-            if (empty($row["js_enabled"])) continue;
-            $inject = strpos($row["js_type"], $type) !== false;
-            if (strpos("survey,data_entry", $row["js_type"]) !== false) {
-                // Check instrument.
-                $inject = $inject && (!array_filter($row["js_instruments"]) || in_array($instrument, $row["js_instruments"], true));
+        // JSMO
+        if ($settings["jsmo"]) {
+            $this->initializeJavascriptModuleObject();
+            if ($settings["sys-debug"] || $settings["proj-debug"]) {
+                $jsmo_name = $this->fw->getJavascriptModuleObjectName();
+                print "<script>console.log('JS Injector: Injected JavascriptModuleObject \"{$jsmo_name}\"', {$jsmo_name});</script>\n";
             }
+        }
+        
+        // Snippets
+        foreach ($settings["snippets"] as $snippet) {
+            $inject = true;
+            $debug = $settings["{$snippet["type"]}-debug"];
+            
+            
+            
             if ($inject) {
-                echo "<script>" . $row["js_code"] . "</script>";
+                // Add debug info
+                $info = $debug ? " data-from=\"REDCap JavaScript Injector {$this->VERSION}\"" : "";
+                $context = $debug ? " data-context=\"{$snippet["type"]}\"" : "";
+                $name = $debug ? (" data-name=\"" . js_escape($snippet["name"]) . "\"") : "";
+                // Actual injection
+                print "<script{$info}{$context}{$name}>\n\t{$snippet["code"]}\n</script>\n";
+                // More debug info, after the fact
+                if ($debug) {
+                    print "<script>console.log('JS Injector: Injected snippet \"' + ".json_encode($snippet["name"]) . " + '\"');</script>\n";
+                }
             }
         }
     }
@@ -188,70 +213,87 @@ class JSInjectorExternalModule extends AbstractExternalModule {
      * @return array 
      */
     function parse_settings($project_id = null, $contexts) {
-
+        // Make a list of all snippets
         $snippets = [];
-
-        // System settings
+        // Load settings
         $ss = $this->getSystemSettings();
-        $sys_jsmo = $ss["sys-jsmo"]["system_value"] == true;
-        foreach ($ss["sys-injections"]["system_value"] as $i => $_) {
-            // Skip non-enabled injections
-            if ($ss["sys-enabled"]["system_value"] !== true) continue;
-            $snippet = [ "jsmo" => $sys_jsmo ];
-            $snippet["code"] = $ss["sys-code"]["system_value"][$i];
-
-        }
-
-        // Project settings
         $ps = $this->getProjectSettings($project_id);
-
-        $settings = $this->getConfig();
-
-        if ($project_id) {
-            $settings = $settings['project-settings'];
-            $values = ExternalModules::getProjectSettingsAsArray($this->PREFIX, $project_id);
-        }
-        else {
-            $settings = $settings['system-settings'];
-            $values = ExternalModules::getSystemSettingsAsArray($this->PREFIX);
-        }
-
-        return $this->_getFormattedSettings($settings, $values);
-    }
-
-    /**
-     * Auxiliary function for getFormattedSettings().
-     */
-    protected function _getFormattedSettings($settings, $values, $inherited_deltas = []) {
-        $formatted = [];
-
-        foreach ($settings as $setting) {
-            $key = $setting['key'];
-            $value = $values[$key]['value'];
-            if ($value == null) continue;
-            
-            foreach ($inherited_deltas as $delta) {
-                $value = $value[$delta];
+        $jsmo = ($ss["sys-jsmo"]["system_value"] == true) || ($ps["proj-jsmo"] == true);
+        // Parse system settings
+        foreach ($ss["sys-injections"]["system_value"] as $i => $_) {
+            $snippet["type"] = "sys";
+            $snippet["name"] = $ss["sys-name"]["system_value"][$i];
+            if (empty($snippet["name"])) {
+                $snippet["name"] = "<unnamed>";
             }
-
-            if ($setting['type'] == 'sub_settings') {
-                $deltas = array_keys($value);
-                $value = [];
-
-                foreach ($deltas as $delta) {
-                    $sub_deltas = array_merge($inherited_deltas, [$delta]);
-                    $value[$delta] = $this->_getFormattedSettings($setting['sub_settings'], $values, $sub_deltas);
-                }
-
-                if (empty($setting['repeatable'])) {
-                    $value = $value[0];
+            $snippet["sys-enabled"] = $ss["sys-enabled"]["system_value"][$i] == true;
+            $snippet["proj-enabled"] = $ss["sys-proj-enabled"]["system_value"][$i] == true;
+            $snippet["proj-limit"] = "all";
+            $snippet["proj-list"] = [];
+            if ($snippet["proj-enabled"]) {
+                $limit = $ss["sys-proj-limit"]["system_value"][$i];
+                $snippet["proj-limit"] = in_array($limit, ["include","exclude"], true) ? $limit : "all";
+                $snippet["proj-list"] = array_unique(explode(",", trim($ss["sys-proj-list"]["system_value"][$i] ?? "")));
+            }
+            $snippet["code"] = $ss["sys-code"]["system_value"][$i];
+            $snippet["ctx"]["projall"] = $ss["sys-proj-context_all"]["system_value"][$i] == true;
+            $snippet["ctx"]["sysall"] = $ss["sys-context_all"]["system_value"][$i] == true;
+            foreach ($contexts as $this_context) {
+                $snippet["ctx"][$this_context] = false;
+            }
+            foreach ($ss as $this_key => $this_val) {
+                $this_context = array_pop(explode("_", $this_key, 2));
+                if (in_array($this_context, $contexts, true)) {
+                    $val = $ss[$this_key]["system_value"][$i];
+                    if ($val == "include") {
+                        $snippet["ctx"][$this_context] = true;
+                    }
+                    else if ($val <> "exclude") {
+                        $snippet["ctx"][$this_context] = contains($this_key, "proj-context") ? $snippet["ctx"]["projall"] : $snippet["ctx"]["sysall"];
+                    }
                 }
             }
-
-            $formatted[$key] = $value;
+            $snippets[] = $snippet;
         }
-
-        return $formatted;
+        // Parse project settings
+        foreach ($ps["proj-injections"] as $i => $_) {
+            $snippet["type"] = "proj";
+            $snippet["name"] = $ps["proj-name"][$i];
+            if (empty($snippet["name"])) {
+                $snippet["name"] = "<unnamed>";
+            }
+            $snippet["sys-enabled"] = false;
+            $snippet["proj-enabled"] = $ps["proj-enabled"][$i] == true;
+            $snippet["proj-limit"] = "include";
+            $snippet["proj-list"] = [$project_id];
+            $snippet["code"] = $ps["proj-code"][$i];
+            $snippet["ctx"]["projall"] = $ps["proj-context_all"][$i] == true;
+            $snippet["ctx"]["sysall"] = false;
+            foreach ($contexts as $this_context) {
+                $snippet["ctx"][$this_context] = false;
+            }
+            foreach ($ps as $this_key => $this_val) {
+                if (starts_with($this_key, "proj-context")) {
+                    $this_context = array_pop(explode("_", $this_key, 2));
+                    if (in_array($this_context, $contexts, true)) {
+                        $val = $ps[$this_key][$i];
+                        if ($val == "include") {
+                            $snippet["ctx"][$this_context] = true;
+                        }
+                        else if ($val <> "exclude") {
+                            $snippet["ctx"][$this_context] = $snippet["ctx"]["projall"];
+                        }
+                    }
+                }
+            }
+            $snippets[] = $snippet;
+        }
+        return [ 
+            "sys-debug" => $ss["sys-debug"]["system_value"] == true,
+            "proj-debug" => $ps["proj-debug"] == true,
+            "jsmo" => $jsmo, 
+            "snippets" => $snippets
+        ];
     }
 
     #endregion
