@@ -12,6 +12,12 @@ A REDCap External Module that allows injection of JavaScript on pages.
 - Obtain this module from the Consortium [REDCap Repo](https://redcap.vanderbilt.edu/consortium/modules/index.php) via the Control Center.
 - Go to _Control Center > Technical / Developer Tools > External Modules_ and enable REDCap JavaScript Injector.
 
+### Upgrading from version 1.x
+
+Configuration data from version 1 of this module will be automatically converted to the new configuration model used by version 2.
+
+**Warning**: Once upgraded, there is no way going back to the previous configuration! Thus, it is strongly advised to make a backup of the module settings in all projects using _JavaScript Injector_ before upgrading.
+
 ## Project Configuration
 
 In a project, go to _Applications > External Modules_ and click the _Configure_ button for the REDCap JS Injector module.
