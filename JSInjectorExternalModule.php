@@ -1,6 +1,4 @@
-<?php
-
-namespace DE\RUB\JSInjectorExternalModule;
+<?php namespace DE\RUB\JSInjectorExternalModule;
 
 use ExternalModules\AbstractExternalModule;
 use ExternalModules\ExternalModules;
@@ -21,7 +19,6 @@ class JSInjectorExternalModule extends AbstractExternalModule {
         $this->fw = $this->framework;
     }
 
-
     #region Hooks
 
     // Perform settings upgrade to v2 model
@@ -33,11 +30,13 @@ class JSInjectorExternalModule extends AbstractExternalModule {
 
     // Insert JSMO name into config dialog
     function redcap_module_configuration_settings($project_id, $settings) {
-        $key = $project_id == null ? "sys-jsmo" : "proj-jsmo";
+        $key = $project_id == null ? "sys-jsmo-info" : "proj-jsmo-info";
         $jsmo = $this->getJavascriptModuleObjectName();
         foreach ($settings as &$setting) {
-            if ($setting["key"] === $key) {
-                $setting["name"] = str_replace("#JSMO#", $jsmo, $setting["name"]);
+            foreach ($setting["sub_settings"] as &$sub_setting) {
+                if ($sub_setting["key"] === $key) {
+                    $sub_setting["name"] = str_replace("#JSMO#", $jsmo, $sub_setting["name"]);
+                }
             }
         }
         return $settings;
@@ -112,6 +111,9 @@ class JSInjectorExternalModule extends AbstractExternalModule {
                 else if ($page === "MultiLanguageController:systemConfig") {
                     $context["cc"] = true;
                 }
+                else if (self::IsSystemExternalModulesManager($page)) {
+                    $context["cc"] = true;
+                }
             }
         }
         // Project context
@@ -172,35 +174,96 @@ class JSInjectorExternalModule extends AbstractExternalModule {
     function inject_js($project_id, $context, $instrument) {
 
         // Get "work schedule" ;)
-        $settings = $this->parse_settings($project_id, array_keys($context));
+        $snippets = $this->parse_settings($project_id, array_keys($context));
+
+        // Determine if this is a "named" context
+        $named_context = array_reduce($context, function($carry, $item) {
+            return $carry || $item;
+        }, false);
+        // Then, get the context name
+        $context_names = array_keys(array_filter($context, function($v) {
+            return $v;
+        }));
+
+        $inject_jsmo = false;
+        $debug_jsmo = false;
+
+        // Verify snippets
+        $snippets_to_inject = [];
+        foreach ($snippets as $snippet) {
+            $inject = false;
+            $reject = false;
+
+            // Project context? Check project list and enabled state, but not for "login"
+            if ($project_id != null && !in_array("login", $context_names, true)) {
+                if (!$snippet["proj-enabled"]) {
+                    $reject = true;
+                }
+                else if ($snippet["proj-limit"] == "include") {
+                    if (!in_array($project_id, $snippet["proj-list"], true)) {
+                        $reject = true;
+                    }
+                }
+                else if ($snippet["proj-limit"] == "exclude") {
+                    if (in_array($project_id, $snippet["proj-list"], true)) {
+                        $reject = true;
+                    }
+                }
+            }
+            else {
+                if (!$snippet["sys-enabled"]) {
+                    $reject = true;
+                }
+            }
+            // Rejected? Continue to next item
+            if ($reject) continue;
+
+            // Page type / context
+            if ($named_context) {
+                // Check if there is a named match
+                foreach ($context_names as $this_ctx) {
+                    // Additionally evaluate form for data entry and survey pages
+                    $instrument_check = true;
+                    if ($snippet["type"] == "proj" && in_array($this_ctx, ["data_entry","survey"], true)) {
+                        if (count($snippet["form-list"])) {
+                            $instrument_check = in_array($instrument, $snippet["form-list"], true);
+                        }
+                    }
+                    $inject = $inject || ($snippet["ctx"][$this_ctx] && $instrument_check);
+                }
+            }
+            else {
+                // Check if the snippet should always be injected
+                $inject = $snippet["ctx"][$project_id == null ? "sysall" : "projall"];
+            }
+
+            if ($inject) {
+                $snippets_to_inject[] = $snippet;
+                $inject_jsmo = $inject_jsmo || $snippet["jsmo"];
+                $debug_jsmo = $debug_jsmo || ($snippet["jsmo"] && $snippet["debug"]);
+            }
+        }
 
         // JSMO
-        if ($settings["jsmo"]) {
+        if ($inject_jsmo) {
             $this->initializeJavascriptModuleObject();
-            if ($settings["sys-debug"] || $settings["proj-debug"]) {
+            if ($debug_jsmo) {
                 $jsmo_name = $this->fw->getJavascriptModuleObjectName();
                 print "<script>console.log('JS Injector: Injected JavascriptModuleObject \"{$jsmo_name}\"', {$jsmo_name});</script>\n";
             }
         }
-        
-        // Snippets
-        foreach ($settings["snippets"] as $snippet) {
-            $inject = true;
-            $debug = $settings["{$snippet["type"]}-debug"];
-            
-            
-            
-            if ($inject) {
-                // Add debug info
-                $info = $debug ? " data-from=\"REDCap JavaScript Injector {$this->VERSION}\"" : "";
-                $context = $debug ? " data-context=\"{$snippet["type"]}\"" : "";
-                $name = $debug ? (" data-name=\"" . js_escape($snippet["name"]) . "\"") : "";
-                // Actual injection
-                print "<script{$info}{$context}{$name}>\n\t{$snippet["code"]}\n</script>\n";
-                // More debug info, after the fact
-                if ($debug) {
-                    print "<script>console.log('JS Injector: Injected snippet \"' + ".json_encode($snippet["name"]) . " + '\"');</script>\n";
-                }
+
+        // Inject snippets (after JSMO)
+        foreach ($snippets_to_inject as $snippet) {
+            // Add debug info
+            $info = $snippet["debug"] ? " data-from=\"REDCap JavaScript Injector {$this->VERSION}\"" : "";
+            $context = $snippet["debug"] ? " data-context=\"{$snippet["type"]}\"" : "";
+            $name = $snippet["debug"] ? (" data-name=\"" . js_escape($snippet["name"]) . "\"") : "";
+            // Actual injection
+            print "<script{$info}{$context}{$name}>\n\t{$snippet["code"]}\n</script>\n";
+            // More debug info, after the fact
+            if ($snippet["debug"]) {
+                print "<script>console.log('JS Injector: Injected snippet \"' + ".json_encode($snippet["name"]) . " + '\"');</script>\n";
             }
         }
     }
@@ -208,7 +271,7 @@ class JSInjectorExternalModule extends AbstractExternalModule {
     #region Settings Parser
 
     /**
-     * Parses project and system settings into a useable format
+     * Parses project and system settings into a useable format.
      * @param string|null $project_id 
      * @return array 
      */
@@ -217,31 +280,35 @@ class JSInjectorExternalModule extends AbstractExternalModule {
         $snippets = [];
         // Load settings
         $ss = $this->getSystemSettings();
-        $ps = $this->getProjectSettings($project_id);
-        $jsmo = ($ss["sys-jsmo"]["system_value"] == true) || ($ps["proj-jsmo"] == true);
+        $ps = $project_id == null ? [ "proj-snippet" => []] : $this->getProjectSettings($project_id);
         // Parse system settings
-        foreach ($ss["sys-injections"]["system_value"] as $i => $_) {
-            $snippet["type"] = "sys";
+        foreach ($ss["sys-snippet"]["system_value"] as $i => $_) {
+            $snippet = [
+                "type" => "sys"
+            ];
             $snippet["name"] = $ss["sys-name"]["system_value"][$i];
             if (empty($snippet["name"])) {
                 $snippet["name"] = "<unnamed>";
             }
+            $snippet["jsmo"] = $ss["sys-jsmo"]["system_value"][$i] == true;
+            $snippet["debug"] = $ss["sys-debug"]["system_value"][$i] == true;
+            $snippet["code"] = $ss["sys-code"]["system_value"][$i] ?? "";
             $snippet["sys-enabled"] = $ss["sys-enabled"]["system_value"][$i] == true;
             $snippet["proj-enabled"] = $ss["sys-proj-enabled"]["system_value"][$i] == true;
             $snippet["proj-limit"] = "all";
             $snippet["proj-list"] = [];
+            $snippet["form-list"] = [];
             if ($snippet["proj-enabled"]) {
                 $limit = $ss["sys-proj-limit"]["system_value"][$i];
                 $snippet["proj-limit"] = in_array($limit, ["include","exclude"], true) ? $limit : "all";
                 $snippet["proj-list"] = array_unique(explode(",", trim($ss["sys-proj-list"]["system_value"][$i] ?? "")));
             }
-            $snippet["code"] = $ss["sys-code"]["system_value"][$i];
             $snippet["ctx"]["projall"] = $ss["sys-proj-context_all"]["system_value"][$i] == true;
             $snippet["ctx"]["sysall"] = $ss["sys-context_all"]["system_value"][$i] == true;
             foreach ($contexts as $this_context) {
                 $snippet["ctx"][$this_context] = false;
             }
-            foreach ($ss as $this_key => $this_val) {
+            foreach ($ss as $this_key => $_) {
                 $this_context = array_pop(explode("_", $this_key, 2));
                 if (in_array($this_context, $contexts, true)) {
                     $val = $ss[$this_key]["system_value"][$i];
@@ -256,17 +323,22 @@ class JSInjectorExternalModule extends AbstractExternalModule {
             $snippets[] = $snippet;
         }
         // Parse project settings
-        foreach ($ps["proj-injections"] as $i => $_) {
-            $snippet["type"] = "proj";
+        foreach ($ps["proj-snippet"] as $i => $_) {
+            $snippet = [
+                "type" => "proj"
+            ];
             $snippet["name"] = $ps["proj-name"][$i];
             if (empty($snippet["name"])) {
                 $snippet["name"] = "<unnamed>";
             }
             $snippet["sys-enabled"] = false;
             $snippet["proj-enabled"] = $ps["proj-enabled"][$i] == true;
+            $snippet["jsmo"] = $ps["proj-jsmo"][$i] == true;
+            $snippet["debug"] = $ps["proj-debug"][$i] == true;
+            $snippet["code"] = $ps["proj-code"][$i];
             $snippet["proj-limit"] = "include";
             $snippet["proj-list"] = [$project_id];
-            $snippet["code"] = $ps["proj-code"][$i];
+            $snippet["form-list"] = $ps["proj-instruments"][$i];
             $snippet["ctx"]["projall"] = $ps["proj-context_all"][$i] == true;
             $snippet["ctx"]["sysall"] = false;
             foreach ($contexts as $this_context) {
@@ -276,11 +348,10 @@ class JSInjectorExternalModule extends AbstractExternalModule {
                 if (starts_with($this_key, "proj-context")) {
                     $this_context = array_pop(explode("_", $this_key, 2));
                     if (in_array($this_context, $contexts, true)) {
-                        $val = $ps[$this_key][$i];
-                        if ($val == "include") {
+                        if ($this_val[$i] == "include") {
                             $snippet["ctx"][$this_context] = true;
                         }
-                        else if ($val <> "exclude") {
+                        else if ($this_val[$i] <> "exclude") {
                             $snippet["ctx"][$this_context] = $snippet["ctx"]["projall"];
                         }
                     }
@@ -288,17 +359,12 @@ class JSInjectorExternalModule extends AbstractExternalModule {
             }
             $snippets[] = $snippet;
         }
-        return [ 
-            "sys-debug" => $ss["sys-debug"]["system_value"] == true,
-            "proj-debug" => $ps["proj-debug"] == true,
-            "jsmo" => $jsmo, 
-            "snippets" => $snippets
-        ];
+        return $snippets;
     }
 
     #endregion
 
-    #region Legacy Conversion
+    #region Legacy (v1) Settings Conversion
 
     /**
      * Converts legacy v1 project settings to the new v2 model
@@ -314,7 +380,6 @@ class JSInjectorExternalModule extends AbstractExternalModule {
                 $new = [
                     "enabled" => true,
                     "reserved-hide-from-non-admins-in-project-list" => $old["reserved-hide-from-non-admins-in-project-list"],
-                    "proj-jsmo" => false,
                     // Removes legacy settings
                     "js" => null,
                     "js_enabled" => null,
@@ -323,8 +388,10 @@ class JSInjectorExternalModule extends AbstractExternalModule {
                     "js_code" => null
                 ];
                 foreach ($old["js"] as $i => $_) {
-                    $new["proj-injections"][$i] = true;
+                    $new["proj-snippet"][$i] = true;
                     $new["proj-enabled"][$i] = $old["js_enabled"][$i];
+                    $new["proj-jsmo"][$i] = false;
+                    $new["proj-debug"][$i] = false;
                     // Set default contexts
                     $new["proj-context_all"][$i] = false;
                     $new["proj-context_php"][$i] = null;
@@ -360,5 +427,16 @@ class JSInjectorExternalModule extends AbstractExternalModule {
 
     #endregion
 
+    #region Helpers
+
+    public static function IsSystemExternalModulesManager($page) {
+        return (strpos($page, "manager/control_center.php") !== false);
+    }
+
+    public static function IsProjectExternalModulesManager($page) {
+        return (strpos($page, "manager/project.php") !== false);
+    }
+
+    #endregion
 
 }
