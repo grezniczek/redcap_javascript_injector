@@ -29,8 +29,13 @@
             "type": "descriptive"
         },
         {
-            "name": "<b>Provide an instance of the JavascriptModuleObject:</b><br>When enabled, a JavascriptModuleObject will be instantiated and then can be used in JS snippets. The JavascriptModuleObject is accessible at <i>#JSMO#</i>",
+            "name": "<b>Provide an instance of the JavascriptModuleObject:</b><br>When enabled, a JavascriptModuleObject (JSMO) will be instantiated and then can be used in JS snippets. The JavascriptModuleObject is accessible at <i>#JSMO#</i>",
             "key": "sys-jsmo",
+            "type": "checkbox"
+        },
+        {
+            "name": "<b>Enable debug logging:</b><br>When enabled, injection of snippets and the JSMO will be announced on the browser console. This may be helpful for troubleshooting",
+            "key": "sys-debug",
             "type": "checkbox"
         },
         {
@@ -40,13 +45,18 @@
             "repeatable": true,
             "sub_settings": [
                 {
-                    "name": "<b>Enabled in system contexts:</b>",
+                    "name": "<b>Name</b> (optional)",
+                    "key": "sys-name",
+                    "type": "textbox"
+                },
+                {
+                    "name": "<b>Enabled in system contexts</b>",
                     "key": "sys-enabled",
                     "type": "checkbox"
                 },
                 {
                     "name": "<i>Apply and/or limit to these system pages:</i>",
-                    "key": "sys-limit",
+                    "key": "sys-pages",
                     "type": "descriptive"
                 },
                 {
@@ -188,7 +198,7 @@
                     ]
                 },
                 {
-                    "name": "Login Page (no pid parameter)",
+                    "name": "Login Page (all contexts)",
                     "key": "sys-context_login",
                     "type": "dropdown",
                     "choices": [
@@ -212,8 +222,8 @@
                     "type": "checkbox"
                 },
                 {
-                    "name": "Limit to only some projects:",
-                    "key": "sys-proj-limittype",
+                    "name": "Limit to only some projects",
+                    "key": "sys-proj-limit",
                     "type": "dropdown",
                     "choices": [
                         {
@@ -232,12 +242,12 @@
                 },
                 {
                     "name": "List of projects to limit injection to or to exclude from injection:<br><small>Provide a comma-separated list of project ids</small>",
-                    "key": "sys-proj-limitlist",
+                    "key": "sys-proj-list",
                     "type": "textarea"
                 },
                 {
                     "name": "<i>Appy and/or limit to these project pages:</i>",
-                    "key": "sys-proj-limit",
+                    "key": "sys-proj-pages",
                     "type": "descriptive"
                 },
                 {
@@ -417,25 +427,6 @@
                     ]
                 },
                 {
-                    "name": "Login Page (with pid parameter)",
-                    "key": "sys-proj-context_login",
-                    "type": "dropdown",
-                    "choices": [
-                        {
-                            "value": "",
-                            "name": "Not set (on if all is on)"
-                        },
-                        {
-                            "value": "include",
-                            "name": "Always on"
-                        },
-                        {
-                            "value": "exclude",
-                            "name": "Always off"
-                        }
-                    ]
-                },
-                {
                     "name": "JavaScript Snippet (without &lt;script&gt; tags)",
                     "key": "sys-code",
                     "type": "textarea"
@@ -450,11 +441,21 @@
             "type": "checkbox"
         },
         {
+            "name": "<b>Enable debug logging:</b><br>When enabled, injection of snippets and the JSMO will be announced on the browser console. This may be helpful for troubleshooting",
+            "key": "proj-debug",
+            "type": "checkbox"
+        },
+        {
             "name": "JS Code Injections",
             "key": "proj-injections",
             "type": "sub_settings",
             "repeatable": true,
             "sub_settings": [
+                {
+                    "name": "<b>Name</b> (optional)",
+                    "key": "proj-name",
+                    "type": "textbox"
+                },
                 {
                     "name": "<b>Enabled</b>",
                     "key": "proj-enabled",
@@ -642,7 +643,12 @@
                     ]
                 },
                 {
-                    "name": "In case of <i>Data Entry</i> and <i>Survey</i> pages only, only apply for this specific instrument (leave blank to apply to all instruments)",
+                    "name": "<i>Limit injection to certain instruments on Data Entry and Survey pages:</i>",
+                    "key": "proj-instruments-explanation",
+                    "type": "descriptive"
+                },
+                {
+                    "name": "Inject on this instrument",
                     "key": "proj-instruments",
                     "type": "form-list",
                     "repeatable": true,
