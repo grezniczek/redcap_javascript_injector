@@ -16,13 +16,13 @@ A REDCap External Module that allows injection of JavaScript on pages.
 
 Admins can set this module's project configurations to be accessible only to super users with the **Allow only super-users to configure this module in projects** option.
 
-New since version 2, admins can define _global_ JavaScript injections and optionally limit their scope to certain pages with the **Enable system-defined JavaScript injections** option.
+**New since version 2:** Admins can define _global_ JavaScript injections and optionally limit their scope to certain pages.
 
 > **NOTE:** Note that for any injections targeted at project contexts, these will only work if the module is enabled in the projects. To achieve this without exposing the module's project configuration too widely, it is recommended to turn on **Enable module on all projects by default** and **Hide this module from non-admins in the list of enabled modules on each project** (and then enable visibility in the projects where the module should be exposed). 
 
-Snippets can be turned on/off for system/projects context with the **Enabled in system/project contexts** options. For both, system and project pages, the pages where injection occurs can then be set to include all such context pages or be limited to a few selected pages.
+Snippets can be turned on/off for system/projects contexts with the **Enabled in system/project contexts** options. For both, system and project pages, the pages where injection occurs can then be set to include all such context pages or to be limited to a few selected pages.
 
-If more than one snippet is injected into the same page, the injection occurs in the order the snippets are defined in the configuration dialog.
+If more than one snippet is injected on the same page, the injections occur in the order the snippets are defined in the configuration dialog.
 
 ## Project Configuration
 
@@ -32,9 +32,20 @@ In the configuration dialog, you can define JavaScript snippets for your project
 
 The configuration options include a checkbox to enable/disable each of the JavaScript snippets. Make sure to enable the ones you want to be injected.
 
-If more than one snippet is injected into the same page, the injection occurs in the order the snippets are defined in the configuration dialog.
+If more than one snippet is injected on the same page, the injections occur in the order the snippets are defined in the configuration dialog.
 
-_Note:_ Due to a limitation in the EM configuration dialog, branching logic does not work for nested elements, and thus the instrument selection box cannot be hidden when not applicable (in case of _Project Home Page_, _Record Status Dashboard_, _Add / Edit Records_, and _Record Home Page_).
+## JavascriptModuleObject and Multi-Language Mangagement
+
+When injecting into dynamic pages, the effect of a JavaScript snippet may have to be re-applied after a page update. This is often the case on survey pages and data entry forms with Multi-Language Management (MLM) enabled, as switching between languages redraws parts of the screen. To detect such changes, the EM Framework's _JavascriptModuleObject_ (JSMO) provides a convenient mechanism (`JSMO.afterRender()`), where a callback function can be regisered that will then be executed each time after REDCap has redrawn (parts of) the page (such as after switching the display language via MLM, but this mechanism works independent of MLM). Access to the JSMO in custom JavaScript snippets can be obtained by enabling the **Provide an instance of the JavascriptModuleObject** option (the concrete name of the JSMO is shown under this option).
+
+Thus, to have JavaScript snippet do something each time after a re-render of the page, inject code such as this:
+
+```JS
+ExternalModules.DE.RUB.JSInjectorExternalModule.afterRender(function() {
+    console.log('Rendered'); // Replace with your code
+});
+```
+
 
 ## Acknowledgments
 
