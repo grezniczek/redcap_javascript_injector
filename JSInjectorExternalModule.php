@@ -21,6 +21,14 @@ class JSInjectorExternalModule extends AbstractExternalModule {
 
     #region Hooks
 
+    // Workaround for the redcap_module_system_change_version hook not working
+    function redcap_module_link_check_display($project_id, $link) {
+        if ($this->getSystemSetting("v1-upgrade") != "done") {
+            $this->convert_v1_settings();
+        }
+        return null;
+    }
+
     // Perform settings upgrade to v2 model
     function redcap_module_system_change_version($version, $old_version) {
         $major = explode(".", trim($old_version, "v"))[0] * 1;
@@ -424,6 +432,8 @@ class JSInjectorExternalModule extends AbstractExternalModule {
                 $this->setProjectSettings($new, $pid);
             }
         }
+        // Workaround for version-change hook not working
+        $this->setSystemSetting("v1-upgrade", "done");
     }
 
     #endregion

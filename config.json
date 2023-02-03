@@ -7,7 +7,8 @@
         "redcap_survey_page_top",
         "redcap_project_home_page",
         "redcap_every_page_top",
-        "redcap_module_system_change_version"
+        "redcap_module_system_change_version",
+        "redcap_module_link_check_display"
     ],
     "framework-version": 9,
     "enable-every-page-hooks-on-system-pages": true,
@@ -18,6 +19,15 @@
             "institution": "Ruhr-Universität Bochum"
         }
     ],
+    "links": {
+        "control-center": [
+            {
+               "name": "Version Upgrade Link",
+               "key": "version-upgrade",
+               "url": "javascript: //"
+            }
+         ]
+    },
     "system-settings": [
         {
             "name": "<b>Allow only super-users to configure this module in projects</b>",
