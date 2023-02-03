@@ -23,7 +23,8 @@ class JSInjectorExternalModule extends AbstractExternalModule {
 
     // Perform settings upgrade to v2 model
     function redcap_module_system_change_version($version, $old_version) {
-        if (explode(".", $old_version)[0] * 1 < 2) {
+        $major = explode(".", trim($old_version, "v"))[0] * 1;
+        if ($major == 1) {
             $this->convert_v1_settings();
         }
     }
