@@ -79,6 +79,7 @@ The original version of this external module was basically just a modified versi
 
 Version | Description
 ------- | ------------------
+2.0.1   | Bugfix (broken form list limitation).
 2.0.0   | Major new feature: System and pan-project injections.<br>Redesigned page limitation setup (old settings will be migrated automatically).<br>Debug logging.
 1.1.4   | Added additional injection options.
 1.1.3   | Fix an issue where a (silent, but logged) exception would be thrown.

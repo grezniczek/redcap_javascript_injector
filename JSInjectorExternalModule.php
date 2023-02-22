@@ -347,7 +347,9 @@ class JSInjectorExternalModule extends AbstractExternalModule {
             $snippet["code"] = $ps["proj-code"][$i];
             $snippet["proj-limit"] = "include";
             $snippet["proj-list"] = [$project_id];
-            $snippet["form-list"] = $ps["proj-instruments"][$i];
+            $snippet["form-list"] = array_filter($ps["proj-instruments"][$i], function($item) {
+                return !empty($item);
+            });
             $snippet["ctx"]["projall"] = $ps["proj-context_all"][$i] == true;
             $snippet["ctx"]["sysall"] = false;
             foreach ($contexts as $this_context) {
