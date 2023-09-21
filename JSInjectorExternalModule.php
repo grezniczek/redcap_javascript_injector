@@ -8,17 +8,6 @@ use ExternalModules\ExternalModules;
  */
 class JSInjectorExternalModule extends AbstractExternalModule {
 
-    /**
-     * EM Framework (tooling support)
-     * @var \ExternalModules\Framework
-     */
-    private $fw;
-
-    function __construct() {
-        parent::__construct();
-        $this->fw = $this->framework;
-    }
-
     #region Hooks
 
     // Workaround for the redcap_module_system_change_version hook not working
@@ -257,7 +246,7 @@ class JSInjectorExternalModule extends AbstractExternalModule {
         if ($inject_jsmo) {
             $this->initializeJavascriptModuleObject();
             if ($debug_jsmo) {
-                $jsmo_name = $this->fw->getJavascriptModuleObjectName();
+                $jsmo_name = $this->framework->getJavascriptModuleObjectName();
                 print "<script>console.log('JS Injector: Injected JavascriptModuleObject \"{$jsmo_name}\"', {$jsmo_name});</script>\n";
             }
         }

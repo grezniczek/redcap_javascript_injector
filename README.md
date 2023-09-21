@@ -79,6 +79,7 @@ The original version of this external module was basically just a modified versi
 
 Version | Description
 ------- | ------------------
+2.0.2   | Removed class constructor.
 2.0.1   | Bugfix (broken form list limitation).
 2.0.0   | Major new feature: System and pan-project injections.<br>Redesigned page limitation setup (old settings will be migrated automatically).<br>Debug logging.
 1.1.4   | Added additional injection options.
