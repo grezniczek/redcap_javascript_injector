@@ -273,7 +273,7 @@ class JSInjectorExternalModule extends AbstractExternalModule {
      * @param string|null $project_id 
      * @return array 
      */
-    function parse_settings($project_id = null, $contexts) {
+    function parse_settings($project_id, $contexts) {
         // Make a list of all snippets
         $snippets = [];
         // Load settings
