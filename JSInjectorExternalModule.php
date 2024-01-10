@@ -1,7 +1,6 @@
 <?php namespace DE\RUB\JSInjectorExternalModule;
 
 use ExternalModules\AbstractExternalModule;
-use ExternalModules\ExternalModules;
 
 /**
  * ExternalModule class for Javascript Injector.
@@ -47,7 +46,7 @@ class JSInjectorExternalModule extends AbstractExternalModule {
     }
 
     // Determine context and inject
-    function redcap_every_page_top ($project_id) {
+    function redcap_every_page_top ($project_id = null) {
         $page = defined("PAGE") ? PAGE : "";
         $instrument = null;
         $context = [
@@ -273,7 +272,7 @@ class JSInjectorExternalModule extends AbstractExternalModule {
      * @param string|null $project_id 
      * @return array 
      */
-    function parse_settings($project_id = null, $contexts) {
+    function parse_settings($project_id, $contexts) {
         // Make a list of all snippets
         $snippets = [];
         // Load settings
