@@ -4,7 +4,7 @@ A REDCap External Module that allows injection of JavaScript on pages.
 
 ## Requirements
 
-- REDCap 12.0.0 or newer (tested with REDCap 13.2.4).
+- REDCap with EM Framework v12 support.
 
 ## Installation
 
@@ -85,7 +85,7 @@ The original version of this external module was basically just a modified versi
 
 Version | Description
 ------- | ------------------
-2.1.0   | Support for addition all system page: Home, My Projects, New Project, Help & FAQ, Training Videos, Send-It, Sponsor Dashboard
+2.1.0   | Support for addition all system page: Home, My Projects, New Project, Help & FAQ, Training Videos, Send-It, Sponsor Dashboard.<br>Bumped framework version to 12.
 2.0.2   | Removed class constructor; PHP8-related fix.
 2.0.1   | Bugfix (broken form list limitation).
 2.0.0   | Major new feature: System and pan-project injections.<br>Redesigned page limitation setup (old settings will be migrated automatically).<br>Debug logging.
