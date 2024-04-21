@@ -52,9 +52,15 @@ In addition to the projects pages listed above, the following non-project pages 
 - _Language File Creator/Updater_,
 - _Browse Projects_,
 - _Create/Edit Single User_,
-- _Email Users_, and the
-- _Login Page_.
-
+- _Email Users_,
+- _Login Page_,
+- _Home_,
+- _My Projects_, 
+- _New Project_, 
+- _Help & FAQ_, 
+- _Training Videos_, 
+- _Send-It_, and
+- _Sponsor Dashboard_
 
 If more than one snippet is injected on the same page, the injections occur in the order the snippets are defined in the configuration dialog.
 
@@ -79,6 +85,7 @@ The original version of this external module was basically just a modified versi
 
 Version | Description
 ------- | ------------------
+2.1.0   | Support for addition all system page: Home, My Projects, New Project, Help & FAQ, Training Videos, Send-It, Sponsor Dashboard
 2.0.2   | Removed class constructor; PHP8-related fix.
 2.0.1   | Bugfix (broken form list limitation).
 2.0.0   | Major new feature: System and pan-project injections.<br>Redesigned page limitation setup (old settings will be migrated automatically).<br>Debug logging.

@@ -67,6 +67,13 @@ class JSInjectorExternalModule extends AbstractExternalModule {
             "report" => false,
             "db" => false,
             "dbp" => false,
+            "home" => false, // Home
+            "mp" => false, // My Projects
+            "np" => false, // New Project
+            "hf" => false, // Help & FAQ
+            "tv" => false, // Training Videos
+            "send" => false, // Send-It
+            "sd" => false, // Sponsor Dashboard
         ];
 
         // System context
@@ -110,6 +117,31 @@ class JSInjectorExternalModule extends AbstractExternalModule {
                 }
                 else if (self::IsSystemExternalModulesManager($page)) {
                     $context["cc"] = true;
+                }
+                else if ($page === "SendItController:upload") {
+                    $context["send"] = true;
+                }
+                else if ($page === "index.php") {
+                    if (isset($_GET["action"])) {
+                        if ($_GET["action"] == "user_sponsor_dashboard") {
+                            $context["sd"] = true;
+                        }
+                        elseif ($_GET["action"] == "myprojects") {
+                            $context["mp"] = true;
+                        }
+                        elseif ($_GET["action"] == "create") {
+                            $context["np"] = true;
+                        }
+                        elseif ($_GET["action"] == "help") {
+                            $context["hf"] = true;
+                        }
+                        elseif ($_GET["action"] == "training") {
+                            $context["tv"] = true;
+                        }
+                    }
+                    else if (empty($_GET)) {
+                        $context["home"] = true;
+                    }
                 }
             }
         }
@@ -306,6 +338,7 @@ class JSInjectorExternalModule extends AbstractExternalModule {
                 $snippet["ctx"][$this_context] = false;
             }
             foreach ($ss as $this_key => $_) {
+                if (strpos($this_key, "_") === false) continue;
                 $this_context = array_pop(explode("_", $this_key, 2));
                 if (in_array($this_context, $contexts, true)) {
                     $val = $ss[$this_key]["system_value"][$i];

@@ -51,7 +51,7 @@
                     "type": "textbox"
                 },
                 {
-                    "name": "<b>Enabled in system contexts</b>",
+                    "name": "<b>Enabled in system/non-project contexts</b>",
                     "key": "sys-enabled",
                     "type": "checkbox"
                 },
@@ -231,6 +231,139 @@
                 {
                     "name": "Login Page",
                     "key": "sys-context_login",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Top: Home",
+                    "key": "top-context_home",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Top: My Projects",
+                    "key": "top-context_mp",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Top: New Project",
+                    "key": "top-context_np",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Top: Help & FAQ",
+                    "key": "top-context_hf",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Top: Training Videos",
+                    "key": "top-context_tv",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Top: Send-It",
+                    "key": "top-context_send",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Other: Sponsor Dashboard",
+                    "key": "other-context_sd",
                     "type": "dropdown",
                     "choices": [
                         {
