@@ -339,7 +339,7 @@ class JSInjectorExternalModule extends AbstractExternalModule {
             }
             foreach ($ss as $this_key => $_) {
                 if (strpos($this_key, "_") === false) continue;
-                $this_context = array_pop(explode("_", $this_key, 2));
+                $this_context = explode("_", $this_key, 2)[1];
                 if (in_array($this_context, $contexts, true)) {
                     $val = $ss[$this_key]["system_value"][$i];
                     if ($val == "include") {

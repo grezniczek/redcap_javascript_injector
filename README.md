@@ -85,6 +85,7 @@ The original version of this external module was basically just a modified versi
 
 Version | Description
 ------- | ------------------
+2.1.1   | Minor code change to prevent a PHP strict mode warning.
 2.1.0   | Support for addition all system page: Home, My Projects, New Project, Help & FAQ, Training Videos, Send-It, Sponsor Dashboard.<br>Bumped framework version to 12.
 2.0.2   | Removed class constructor; PHP8-related fix.
 2.0.1   | Bugfix (broken form list limitation).
