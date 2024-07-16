@@ -4,7 +4,7 @@ A REDCap External Module that allows injection of JavaScript on pages.
 
 ## Requirements
 
-- REDCap with EM Framework v12 support.
+- REDCap with EM Framework v14 support.
 
 ## Installation
 
@@ -85,6 +85,7 @@ The original version of this external module was basically just a modified versi
 
 Version | Description
 ------- | ------------------
+2.2.0   | Require EM Framework v14.<br>Added "enable-every-page-hooks-on-login-form" to config.json.
 2.1.1   | Minor code change to prevent a PHP strict mode warning.
 2.1.0   | Support for addition all system page: Home, My Projects, New Project, Help & FAQ, Training Videos, Send-It, Sponsor Dashboard.<br>Bumped framework version to 12.
 2.0.2   | Removed class constructor; PHP8-related fix.
