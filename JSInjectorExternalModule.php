@@ -59,6 +59,7 @@ class JSInjectorExternalModule extends AbstractExternalModule {
             "emailusers" => false,
             "login" => false,
             "php" => false,
+            "psp" => false,
             "rsd" => false,
             "aer" => false,
             "rhp" => false,
@@ -167,6 +168,9 @@ class JSInjectorExternalModule extends AbstractExternalModule {
                 }
                 else if ($page == "index.php") {
                     $context["php"] = true;
+                }
+                else if ($page == "ProjectSetup/index.php") {
+                    $context["psp"] = true;
                 }
                 else if ($page == "DataEntry/record_status_dashboard.php") {
                     $context["rsd"] = true;
@@ -427,6 +431,7 @@ class JSInjectorExternalModule extends AbstractExternalModule {
                     // Set default contexts
                     $new["proj-context_all"][$i] = false;
                     $new["proj-context_php"][$i] = null;
+                    $new["proj-context_psp"][$i] = null;
                     $new["proj-context_rsd"][$i] = null;
                     $new["proj-context_aer"][$i] = null;
                     $new["proj-context_rhp"][$i] = null;

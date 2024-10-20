@@ -427,6 +427,25 @@
                     ]
                 },
                 {
+                    "name": "Project Setup Page",
+                    "key": "sys-proj-context_psp",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
                     "name": "Record Status Dashboard",
                     "key": "sys-proj-context_rsd",
                     "type": "dropdown",
@@ -636,6 +655,25 @@
                 {
                     "name": "Project Home Page",
                     "key": "proj-context_php",
+                    "type": "dropdown",
+                    "choices": [
+                        {
+                            "value": "",
+                            "name": "Not set (on if all is on)"
+                        },
+                        {
+                            "value": "include",
+                            "name": "Always on"
+                        },
+                        {
+                            "value": "exclude",
+                            "name": "Always off"
+                        }
+                    ]
+                },
+                {
+                    "name": "Project Setup Page",
+                    "key": "proj-context_psp",
                     "type": "dropdown",
                     "choices": [
                         {

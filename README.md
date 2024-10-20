@@ -24,6 +24,7 @@ In a project, go to _Applications > External Modules_ and click the _Configure_ 
 
 In the configuration dialog, you can define JavaScript snippets for your project that are injected in _All project pages_ or limited to a choice of different project pages, including 
 - _Project Home Page_,
+- _Project Setup Page_,
 - _Record Status Dashboard_,
 - _Add / Edit Records_,
 - _Record Home Page_, 
@@ -85,6 +86,7 @@ The original version of this external module was basically just a modified versi
 
 Version | Description
 ------- | ------------------
+2.2.1   | Added support for new page: Project Setup Page.
 2.2.0   | Require EM Framework v14.<br>Added "enable-every-page-hooks-on-login-form" to config.json.
 2.1.1   | Minor code change to prevent a PHP strict mode warning.
 2.1.0   | Support for addition all system page: Home, My Projects, New Project, Help & FAQ, Training Videos, Send-It, Sponsor Dashboard.<br>Bumped framework version to 12.
