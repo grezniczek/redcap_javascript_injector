@@ -239,6 +239,9 @@ class JSInjectorExternalModule extends AbstractExternalModule {
         // Get "work schedule" ;)
         $snippets = $this->parse_settings($project_id, array_keys($context));
 
+        // Get URL
+        $url = $_SERVER["REQUEST_URI"];
+
         // Determine if this is a "named" context
         $named_context = array_reduce($context, function($carry, $item) {
             return $carry || $item;
@@ -299,7 +302,15 @@ class JSInjectorExternalModule extends AbstractExternalModule {
                 // Check if the snippet should always be injected
                 $inject = $snippet["ctx"][$project_id == null ? "sysall" : "projall"];
             }
-
+            // Custom URL - this takes precence over all
+            if (count($snippet["custom-reject"] ?? [])) {
+                $reject = $this->test_custom_url($url, $snippet["custom-reject"]);
+                if ($reject) continue;
+            }
+            if (count($snippet["custom-inject"] ?? [])) {
+                $inject = $inject || $this->test_custom_url($url, $snippet["custom-inject"]);
+            }
+            // Inject
             if ($inject) {
                 $snippets_to_inject[] = $snippet;
                 $inject_jsmo = $inject_jsmo || $snippet["jsmo"];
@@ -420,6 +431,8 @@ class JSInjectorExternalModule extends AbstractExternalModule {
             $snippet["form-list"] = array_filter($ps["proj-instruments"][$i], function($item) {
                 return !empty($item);
             });
+            $snippet["custom-inject"] = array_filter(array_map("trim", explode("\n", $ps["proj-custom-inject"][$i])), "strlen");
+            $snippet["custom-reject"] = array_filter(array_map("trim", explode("\n", $ps["proj-custom-reject"][$i])), "strlen");
             $snippet["ctx"]["projall"] = $ps["proj-context_all"][$i] == true;
             $snippet["ctx"]["sysall"] = false;
             foreach ($contexts as $this_context) {
@@ -519,6 +532,25 @@ class JSInjectorExternalModule extends AbstractExternalModule {
 
     public static function IsProjectExternalModulesManager($page) {
         return (strpos($page, "manager/project.php") !== false);
+    }
+
+    /**
+     * Tests if a URL matches a list of criteria
+     * @param string $url 
+     * @param string[] $criteria 
+     * @return bool 
+     */
+    private static function test_custom_url($url, $criteria) {
+        $match = false;
+        foreach ($criteria as $line) {
+            $parts = array_filter(array_map("trim", explode(" ", $line)), "strlen");
+            $all_parts_present = count($parts) > 0;
+            foreach ($parts as $part) {
+                $all_parts_present = $all_parts_present && (strpos($url, $part) !== false);
+            }
+            $match = $match || $all_parts_present;
+        }
+        return $match;
     }
 
     #endregion

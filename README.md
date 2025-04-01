@@ -35,6 +35,9 @@ In the configuration dialog, you can define JavaScript snippets for your project
 
 For data entry and survey pages, injection can be further limited by specifying one or more instruments.
 
+Additionally, project injection pages can be controlled by adding parts of the URL to inclusion (_Enable_) and exclusion (_Disable_) list. When any inclusion items are found in the URL, a snippet is included. When any exclusion item matches, the injection will be rejected. Exclusion has priority over inclusion (and over any of the other settings). Add one item per line. When a line consists of multiple character sequences separated by spaces, all of them have to match, but the order or overlaps are not important.
+E.g., to match the _"Create New Report"_ and _"Edit Existing Report"_ pages, add this to the inclusion box: `DataExport/index.php addedit=1`. To target the _"Create New Report"_ specifically, you could add the term `create=1` to the inclusion box (on the same line), or alternatively add `report_id=` to the exclusion box.
+
 If more than one snippet is injected on the same page, the injections occur in the order the snippets are defined in the configuration dialog.
 
 ## System Configuration
@@ -86,6 +89,7 @@ The original version of this external module was basically just a modified versi
 
 Version | Description
 ------- | ------------------
+2.3.0   | New feature: Add JS from a file in addition to entering it into directly into module config.<br>New options to direct injections.
 2.2.1   | Added support for new page: Project Setup Page.
 2.2.0   | Require EM Framework v14.<br>Added "enable-every-page-hooks-on-login-form" to config.json.
 2.1.1   | Minor code change to prevent a PHP strict mode warning.

@@ -893,6 +893,16 @@
                     "type": "form-list",
                     "repeatable": true,
                     "select2": true
+                },
+                {
+                    "name": "<i>Enable</i> (Always on) on these custom project pages:<br>The snippet will be injected if the URL contains any one of the following strings (add one string per line; this setting takes precedence over any previous location settings)",
+                    "key": "proj-custom-inject",
+                    "type": "textarea"
+                },
+                {
+                    "name": "<i>Disable</i> (Always off) on these custom project pages:<br>The snippet will be injected if the URL contains any one of the following strings (add one string per line; this setting takes precedence over any previous location settings, including the <i>\"Enable on these custom project pages\"</i> setting)",
+                    "key": "proj-custom-reject",
+                    "type": "textarea"
                 }
             ]
         }
