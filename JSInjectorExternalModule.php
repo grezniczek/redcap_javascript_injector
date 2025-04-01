@@ -39,6 +39,36 @@ class JSInjectorExternalModule extends AbstractExternalModule {
         return $settings;
     }
 
+    // Set some defaults
+    function redcap_module_save_configuration($project_id) {
+        $snippets = $project_id == null ? $this->getSystemSetting("sys-jsmo") : $this->getProjectSetting("proj-jsmo");
+        $defaults = $project_id == null ? [
+            "sys-order" => "file-first",
+        ] : [
+            "proj-order" => "file-first",
+        ];
+        $values = [];
+        $update_needed = [];
+        foreach ($defaults as $name => $_) {
+            $values[$name] = $project_id == null ? $this->getSystemSetting($name) : $this->getProjectSetting($name);
+            foreach ($snippets as $idx => $_) {
+                if (($values[$name][$idx] ?? null) === null) {
+                    $values[$name][$idx] = $defaults[$name];
+                    $update_needed[$name] = true;
+                }
+            }
+            ksort($values[$name]);
+        }
+        foreach ($update_needed as $name => $_) {
+            if ($project_id == null) {
+                $this->setSystemSetting($name, $values[$name]);
+            }
+            else {
+                $this->setProjectSetting($name, $values[$name]);
+            }
+        }
+    }
+
     // Set visibility of Configure button in projects
     function redcap_module_configure_button_display() {
         if ($this->getSystemSetting("su_only") && !SUPER_USER) return null;
@@ -293,7 +323,18 @@ class JSInjectorExternalModule extends AbstractExternalModule {
             $context = $snippet["debug"] ? " data-context=\"{$snippet["type"]}\"" : "";
             $name = $snippet["debug"] ? (" data-name=\"" . js_escape($snippet["name"]) . "\"") : "";
             // Actual injection
-            print "<script{$info}{$context}{$name}>\n\t{$snippet["code"]}\n</script>\n";
+            $injections = [];
+            if (strlen(trim($snippet["code"]))) {
+                $type = $snippet["debug"] ? " data-type=\"code\"" : "";
+                $injections[$snippet["file-first"] ? 2 : 1] = "<script{$info}{$context}{$name}{$type}>\n\t{$snippet["code"]}\n</script>";
+            }
+            if ($snippet["code-file"]) {
+                $type = $snippet["debug"] ? " data-type=\"code-file\"" : "";
+                list($_, $_, $code_file_contents) = \Files::getEdocContentsAttributes($snippet["code-file"]);
+                $injections[$snippet["file-first"] ? 1 : 2] = "<script{$info}{$context}{$name}{$type}>\n\t{$code_file_contents}\n</script>";
+            }
+            ksort($injections);
+            print join("\n", $injections);
             // More debug info, after the fact
             if ($snippet["debug"]) {
                 print "<script>console.log('JS Injector: Injected snippet \"' + ".json_encode($snippet["name"]) . " + '\"');</script>\n";
@@ -326,6 +367,8 @@ class JSInjectorExternalModule extends AbstractExternalModule {
             $snippet["jsmo"] = $ss["sys-jsmo"]["system_value"][$i] == true;
             $snippet["debug"] = $ss["sys-debug"]["system_value"][$i] == true;
             $snippet["code"] = $ss["sys-code"]["system_value"][$i] ?? "";
+            $snippet["code-file"] = $ps["sys-code-file"][$i];
+            $snippet["file-first"] = $ps["sys-order"][$i] == "file-first";
             $snippet["sys-enabled"] = $ss["sys-enabled"]["system_value"][$i] == true;
             $snippet["proj-enabled"] = $ss["sys-proj-enabled"]["system_value"][$i] == true;
             $snippet["proj-limit"] = "all";
@@ -370,6 +413,8 @@ class JSInjectorExternalModule extends AbstractExternalModule {
             $snippet["jsmo"] = $ps["proj-jsmo"][$i] == true;
             $snippet["debug"] = $ps["proj-debug"][$i] == true;
             $snippet["code"] = $ps["proj-code"][$i];
+            $snippet["code-file"] = $ps["proj-code-file"][$i];
+            $snippet["file-first"] = $ps["proj-order"][$i] == "file-first";
             $snippet["proj-limit"] = "include";
             $snippet["proj-list"] = [$project_id];
             $snippet["form-list"] = array_filter($ps["proj-instruments"][$i], function($item) {

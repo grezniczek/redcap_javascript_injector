@@ -79,6 +79,26 @@
                     "type": "textarea"
                 },
                 {
+                    "name": "JavaScript Code (without &lt;script&gt; tags) in a file:<br>Note: The code in box above will be injected <i>inline</i> in addition to the code in the file.",
+                    "key": "sys-code-file",
+                    "type": "file"
+                },
+                {
+                    "name": "Injection order",
+                    "key": "sys-order",
+                    "type": "radio",
+                    "choices": [
+                        {
+                            "value": "text-first",
+                            "name": "Code from textbox before file"
+                        },
+                        {
+                            "value": "file-first",
+                            "name": "Code from textbox after file"
+                        }
+                    ]
+                },
+                {
                     "name": "<i style='background-color:lightyellow;'>Apply and/or limit to these system pages:</i>",
                     "key": "sys-pages",
                     "type": "descriptive"
@@ -641,6 +661,26 @@
                     "name": "JavaScript Code (without &lt;script&gt; tags)",
                     "key": "proj-code",
                     "type": "textarea"
+                },
+                {
+                    "name": "JavaScript Code (without &lt;script&gt; tags) in a file:<br>Note: The code in box above will be injected <i>inline</i> in addition to the code in the file.",
+                    "key": "proj-code-file",
+                    "type": "file"
+                },
+                {
+                    "name": "Injection order",
+                    "key": "proj-order",
+                    "type": "radio",
+                    "choices": [
+                        {
+                            "value": "text-first",
+                            "name": "Code from textbox before file"
+                        },
+                        {
+                            "value": "file-first",
+                            "name": "Code from textbox after file"
+                        }
+                    ]
                 },
                 {
                     "name": "<i style='background-color:lightyellow;'>Apply and/or limit to these project pages:</i>",
