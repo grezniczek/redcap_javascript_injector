@@ -127,3 +127,10 @@ Or by adding this reference to your BibTeX database:
 ```
 
 These instructions are also available in [GitHub](https://github.com/grezniczek/redcap_javascript_injector) under 'Cite This Repository'.
+
+## Support this work
+
+If you find this software useful, you can [buy me a coffee or a beer](https://www.paypal.com/donate/?hosted_button_id=6VRC2JFRCBGRN). Your support is purely voluntary and helps me continue improving this project. Of course, you are not entitled to any special benefits—except my silent appreciation while enjoying the drink! 🍻☕  
+_Please note that donations are purely voluntary and not tax-deductible._
+
+![PayPal QR Code](/images/qr-paypal.png)
