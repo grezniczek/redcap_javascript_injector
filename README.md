@@ -1,5 +1,7 @@
 # REDCap JavaScript Injector
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15120311.svg)](https://doi.org/10.5281/zenodo.15120311)
+
 A REDCap External Module that allows injection of JavaScript on pages.
 
 ## Requirements
@@ -103,3 +105,25 @@ Version | Description
 1.1.1   | Fix the _All project pages_ behavior that was broken in version 1.1.0.<br>Disable branching logic.<br>Add instructions for testing the module.
 1.1.0   | New feature: Inject JS on more project pages: _Project Home Page_, _Record Home Page_, _Add / Edit Records_, and _Record Status Dashboard_.
 1.0.0   | Initial release.
+
+## How to cite this work
+
+If you use this external module for a project that generates a research output, please cite this software in addition to [citing REDCap](https://projectredcap.org/resources/citations/). You can do so using the APA referencing style as below:
+
+> Rezniczek, G. A. (2025). REDCap JavaScript Injector (Version 2.3.0) [Computer software]. https://doi.org/10.5281/zenodo.15120311
+
+Or by adding this reference to your BibTeX database:
+
+```bibtex
+@software{Rezniczek_REDCap_JavaScript_Injector_2025,
+  author = {Rezniczek, Günther A.},
+  title = {{REDCap JavaScript Injector}},
+  version = {2.3.0},
+  year = {2025}
+  month = {4},
+  doi = {10.5281/zenodo.15120311},
+  url = {https://github.com/grezniczek/redcap_javascript_injector},
+}
+```
+
+These instructions are also available in [GitHub](https://github.com/grezniczek/redcap_javascript_injector) under 'Cite This Repository'.
