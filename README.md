@@ -119,9 +119,9 @@ Or by adding this reference to your BibTeX database:
 @software{Rezniczek_REDCap_JavaScript_Injector_2025,
   author = {Rezniczek, Günther A.},
   title = {{REDCap JavaScript Injector}},
-  version = {2.3.0},
+  version = {2.3.1},
   year = {2025}
-  month = {4},
+  month = {5},
   doi = {10.5281/zenodo.15120311},
   url = {https://github.com/grezniczek/redcap_javascript_injector},
 }
