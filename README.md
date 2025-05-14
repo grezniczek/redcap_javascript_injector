@@ -111,7 +111,7 @@ Version | Description
 
 If you use this external module for a project that generates a research output, please cite this software in addition to [citing REDCap](https://projectredcap.org/resources/citations/). You can do so using the APA referencing style as below:
 
-> Rezniczek, G. A. (2025). REDCap JavaScript Injector (Version 2.3.0) [Computer software]. https://doi.org/10.5281/zenodo.15120311
+> Rezniczek, G. A. (2025). REDCap JavaScript Injector [Computer software]. https://doi.org/10.5281/zenodo.15120311
 
 Or by adding this reference to your BibTeX database:
 
