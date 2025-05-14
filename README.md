@@ -11,7 +11,7 @@ A REDCap External Module that allows injection of JavaScript on pages.
 ## Installation
 
 - Clone this repo into `<redcap-root>/modules/redcap_javascript_injector_v<version-number>`, or
-- Obtain this module from the Consortium [REDCap Repo](https://redcap.vanderbilt.edu/consortium/modules/index.php) via the Control Center.
+- Obtain this module from the Consortium [REDCap Repo](https://redcap.vumc.org/consortium/modules/index.php) via the Control Center.
 - Go to _Control Center > Technical / Developer Tools > External Modules_ and enable REDCap JavaScript Injector.
 
 ### Upgrading from version 1.x
@@ -91,6 +91,7 @@ The original version of this external module was basically just a modified versi
 
 Version | Description
 ------- | ------------------
+2.3.1   | Fixed Repository link in README.
 2.3.0   | New feature: Add JS from a file in addition to entering it into directly into module config.<br>New options to direct injections.
 2.2.1   | Added support for new page: Project Setup Page.
 2.2.0   | Require EM Framework v14.<br>Added "enable-every-page-hooks-on-login-form" to config.json.
